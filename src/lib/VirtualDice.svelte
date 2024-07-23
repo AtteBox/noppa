@@ -98,9 +98,14 @@
   };
 </script>
 
+<div class="breadcrumb">
+  <span class="{currentStep === 1 ? 'active' : ''}">Step 1: Create Options</span>
+  <span class="{currentStep === 2 ? 'active' : ''}">Step 2: Throwing Dice</span>
+  <span class="{currentStep === 3 ? 'active' : ''}">Step 3: Result</span>
+</div>
+
 {#if currentStep === 1}
   <div>
-    <h2>Step 1: Create Options</h2>
     <div id="new_item_container">
     <input
       type="text"
@@ -135,7 +140,6 @@
   </div>
 {:else if currentStep === 2}
   <div>
-    <h2>Step 2: Throwing Dice</h2>
     <div class="controls">
       <button on:click={backToOptions}>Cancel</button>
     </div>
@@ -150,7 +154,6 @@
   </div>
 {:else if currentStep === 3}
   <div>
-    <h2>Step 3: Result</h2>
     {#if items.length > 1}
       <p>The random choice is: <span style="background-color: {randomChoice.color}; color: white; padding: 0.2em; border-radius: 3px;">{randomChoice.text}</span></p>
     {:else}
@@ -192,7 +195,7 @@
   .controls {
     display: flex;
     justify-content: center;
-    margin-top: 1em;
+    margin-top: 3em;
   }
 
   .button-group {
@@ -211,5 +214,24 @@
     align-items: center;
     gap: 0.5em;
     margin: 8px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-bottom: 3em;
+  }
+
+  .breadcrumb span {
+    padding: 0.5em;
+    border-radius: 5px;
+  }
+
+  .breadcrumb .active {
+    font-weight: bold;
+    text-decoration: underline;
+    color: white;
+    background-color: #007BFF;
   }
 </style>

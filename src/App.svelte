@@ -5,7 +5,7 @@
 </script>
 
 <main>
-  <h1>Noppa: A virtual Dice</h1>
+  <h1>Noppa 🎲 — A Virtual Dice</h1>
 
   <div class="card">
     <VirtualDice />
