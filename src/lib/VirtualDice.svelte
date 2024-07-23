@@ -54,6 +54,10 @@
     items = [];
   };
 
+  const handleInputChanged = (event: Event, index: number) => {
+    editItem(index, (event.target as HTMLInputElement).value)
+  };
+
   const throwDice = () => {
     if (items.length > 0) {
       rolling = true;
@@ -123,7 +127,7 @@
           <input
             type="text"
             bind:value={items[index].text}
-            on:input={(e) => editItem(index, e.target.value)}
+            on:input={(e) => handleInputChanged(e, index)}
             style="background-color: {color}; color: white;"
           />
           <button on:click={() => deleteItem(index)}>Delete</button>
@@ -154,7 +158,7 @@
   </div>
 {:else if currentStep === 3}
   <div>
-    {#if items.length > 1}
+    {#if items.length > 1 && randomChoice}
       <p>The random choice is: <span style="background-color: {randomChoice.color}; color: white; padding: 0.2em; border-radius: 3px;">{randomChoice.text}</span></p>
     {:else}
       <p>There must be at least two options.</p>
