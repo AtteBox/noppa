@@ -112,6 +112,7 @@
   <div>
     <div id="new_item_container">
     <input
+      id="new_item_input"
       type="text"
       bind:value={newItem}
       placeholder="New Option"
@@ -125,6 +126,7 @@
       {#each items as { text, color }, index}
         <li style="background-color: {color};">
           <input
+            id="item_{index}_input"
             type="text"
             bind:value={items[index].text}
             on:input={(e) => handleInputChanged(e, index)}
