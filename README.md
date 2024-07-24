@@ -1,3 +1,11 @@
+# Noppa 🎲 — A Virtual Dice
+
+A dice for any options: An app (PWA) for randomly picking an option from a a list which the user can enter.
+
+# Deployment
+
+The PWA app has been deployed using AWS Amplify: https://main.dfmzvros4dh9z.amplifyapp.com/
+
 # Svelte + TS + Vite
 
 This template should help get you started developing with Svelte and TypeScript in Vite.
