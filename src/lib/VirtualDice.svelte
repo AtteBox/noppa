@@ -6,6 +6,7 @@
   let rolling: boolean = false;
   let newItemInput: HTMLInputElement;
   let highlightedIndex: number | null = null;
+  let customOptions: Record<string, string[]> = loadCustomOptions();
 
   function generateDistinctColors(amount: number): string[] {
     const colors: string[] = [];
@@ -24,6 +25,28 @@
   function updateColors() {
     const colors = generateDistinctColors(items.length);
     items = items.map((item, index) => ({ ...item, color: colors[index] }));
+  }
+
+  function loadCustomOptions(): Record<string, string[]> {
+    const saved = localStorage.getItem("customOptions");
+    return saved ? JSON.parse(saved) : {};
+  }
+
+  function saveCustomOptions(name: string, options: string[]) {
+    customOptions = { ...customOptions, [name]: options };
+    localStorage.setItem("customOptions", JSON.stringify(customOptions));
+  }
+
+  function deleteCustomOptions(name: string, target: Event) {
+    target.stopPropagation();
+    if (
+      confirm(`Are you sure you want to delete the custom option: "${name}"?`)
+    ) {
+      customOptions = Object.fromEntries(
+        Object.entries(customOptions).filter(([key]) => key !== name)
+      );
+      localStorage.setItem("customOptions", JSON.stringify(customOptions));
+    }
   }
 
   const addItem = () => {
@@ -111,8 +134,18 @@
   const prefilledOptions: Record<string, string[]> = {
     "Dice Numbers": ["1", "2", "3", "4", "5", "6"],
     "Coin Flip": ["Heads", "Tails"],
-    "Direction": ["Left", "Straight", "Right"],
+    Direction: ["Left", "Straight", "Right"],
   };
+
+  function handleSave() {
+    const name = prompt("Enter a name for your prefilled options:");
+    if (name) {
+      saveCustomOptions(
+        name,
+        items.map((item) => item.text)
+      );
+    }
+  }
 </script>
 
 <div class="breadcrumb">
@@ -152,7 +185,10 @@
 
     <div class="controls">
       <div class="button-group">
-        <button on:click={throwDice}>Throw Dice!</button>
+        {#if items.length > 1}
+          <button on:click={throwDice}>Throw Dice!</button>
+          <button on:click={handleSave}>Save Options</button>
+        {/if}
         <button on:click={clearOptions}>Clear Options</button>
       </div>
     </div>
@@ -160,14 +196,27 @@
     <div class="prefilled-options">
       <h3>Prefilled Options:</h3>
       {#each Object.keys(prefilledOptions) as option}
-        <button on:click={() => setPrefilledOptions(prefilledOptions[option])}>{option}</button>
+        <button on:click={() => setPrefilledOptions(prefilledOptions[option])}
+          >{option}</button
+        >
+      {/each}
+      {#each Object.keys(customOptions) as customOption}
+        <div class="custom-option">
+          <button
+            on:click={() => setPrefilledOptions(customOptions[customOption])}
+            >{customOption}
+            <button
+              class="delete-button"
+              on:click={(e) => deleteCustomOptions(customOption, e)}>✖</button
+            ></button
+          >
+        </div>
       {/each}
     </div>
   </div>
 {:else if currentStep === 2}
   <div>
-    <div class="controls">
-    </div>
+    <div class="controls"></div>
     <p>The dice is being thrown...</p>
     <ul>
       {#each items as { text, color }, index}
@@ -197,6 +246,7 @@
       <button on:click={backToOptions}>Modify Options</button>
       <button on:click={throwDice}>Rethrow Dice</button>
       <button on:click={clearItems}>Start Over</button>
+      <button on:click={handleSave}>Save Options</button>
     </div>
     <ul>
       {#each items as { text, color }, index}
@@ -280,5 +330,19 @@
   .prefilled-options button {
     margin: 0.5em;
     padding: 0.5em 1em;
+  }
+
+  .custom-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+  }
+
+  .delete-button {
+    background-color: transparent;
+    border: none;
+    color: red;
+    line-height: 0;
   }
 </style>
