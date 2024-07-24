@@ -35,6 +35,11 @@
     }
   };
 
+  const setPrefilledOptions = (options: string[]) => {
+    items = options.map((text) => ({ text, color: "" }));
+    updateColors();
+  };
+
   const deleteItem = (index: number) => {
     items = items.filter((_, i) => i !== index);
     updateColors();
@@ -102,6 +107,12 @@
     randomChoice = null;
     highlightedIndex = null;
   };
+
+  const prefilledOptions: Record<string, string[]> = {
+    "Dice Numbers": ["1", "2", "3", "4", "5", "6"],
+    "Coin Flip": ["Heads", "Tails"],
+    "Direction": ["Left", "Straight", "Right"],
+  };
 </script>
 
 <div class="breadcrumb">
@@ -145,11 +156,17 @@
         <button on:click={clearOptions}>Clear Options</button>
       </div>
     </div>
+
+    <div class="prefilled-options">
+      <h3>Prefilled Options:</h3>
+      {#each Object.keys(prefilledOptions) as option}
+        <button on:click={() => setPrefilledOptions(prefilledOptions[option])}>{option}</button>
+      {/each}
+    </div>
   </div>
 {:else if currentStep === 2}
   <div>
     <div class="controls">
-      <button on:click={backToOptions}>Cancel</button>
     </div>
     <p>The dice is being thrown...</p>
     <ul>
@@ -178,6 +195,7 @@
 
     <div class="controls">
       <button on:click={backToOptions}>Modify Options</button>
+      <button on:click={throwDice}>Rethrow Dice</button>
       <button on:click={clearItems}>Start Over</button>
     </div>
     <ul>
@@ -217,6 +235,7 @@
     display: flex;
     justify-content: center;
     margin-top: 3em;
+    gap: 1em;
   }
 
   .button-group {
@@ -251,5 +270,15 @@
     text-decoration: underline;
     color: white;
     background-color: #007bff;
+  }
+
+  .prefilled-options {
+    margin-top: 2em;
+    text-align: center;
+  }
+
+  .prefilled-options button {
+    margin: 0.5em;
+    padding: 0.5em 1em;
   }
 </style>
