@@ -1,8 +1,8 @@
 <script lang="ts">
-  let items: { text: string, color: string }[] = [];
-  let newItem: string = '';
+  let items: { text: string; color: string }[] = [];
+  let newItem: string = "";
   let currentStep: number = 1;
-  let randomChoice: { text: string, color: string } | null = null;
+  let randomChoice: { text: string; color: string } | null = null;
   let rolling: boolean = false;
   let newItemInput: HTMLInputElement;
   let highlightedIndex: number | null = null;
@@ -13,9 +13,9 @@
     const maxColors = 360; // Reasonable upper limit
 
     for (let i = 0; i < Math.min(amount, maxColors); i++) {
-        const hue = i * step;
-        const color = `hsl(${hue}, 60%, 80%)`; // Pastel colors with lower saturation and higher lightness
-        colors.push(color);
+      const hue = i * step;
+      const color = `hsl(${hue}, 60%, 80%)`; // Pastel colors with lower saturation and higher lightness
+      colors.push(color);
     }
 
     return colors;
@@ -28,8 +28,8 @@
 
   const addItem = () => {
     if (newItem.trim()) {
-      items = [...items, { text: newItem, color: '' }];
-      newItem = '';
+      items = [...items, { text: newItem, color: "" }];
+      newItem = "";
       newItemInput.focus(); // Focus the input element
       updateColors();
     }
@@ -41,7 +41,9 @@
   };
 
   const editItem = (index: number, newValue: string) => {
-    items = items.map((item, i) => i === index ? { ...item, text: newValue } : item);
+    items = items.map((item, i) =>
+      i === index ? { ...item, text: newValue } : item
+    );
   };
 
   const clearItems = () => {
@@ -55,7 +57,7 @@
   };
 
   const handleInputChanged = (event: Event, index: number) => {
-    editItem(index, (event.target as HTMLInputElement).value)
+    editItem(index, (event.target as HTMLInputElement).value);
   };
 
   const throwDice = () => {
@@ -85,12 +87,12 @@
 
       highlightNext();
     } else {
-      alert('No items to choose from.');
+      alert("No items to choose from.");
     }
   };
 
   const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       addItem();
     }
   };
@@ -103,24 +105,24 @@
 </script>
 
 <div class="breadcrumb">
-  <span class="{currentStep === 1 ? 'active' : ''}">Step 1: Create Options</span>
-  <span class="{currentStep === 2 ? 'active' : ''}">Step 2: Throwing Dice</span>
-  <span class="{currentStep === 3 ? 'active' : ''}">Step 3: Result</span>
+  <span class={currentStep === 1 ? "active" : ""}>Step 1: Create Options</span>
+  <span class={currentStep === 2 ? "active" : ""}>Step 2: Throwing Dice</span>
+  <span class={currentStep === 3 ? "active" : ""}>Step 3: Result</span>
 </div>
 
 {#if currentStep === 1}
   <div>
     <div id="new_item_container">
-    <input
-      id="new_item_input"
-      type="text"
-      bind:value={newItem}
-      placeholder="New Option"
-      bind:this={newItemInput}
-      on:keypress={handleKeyPress}
-    />
-    <button on:click={addItem}>Add Option</button>
-  </div>
+      <input
+        id="new_item_input"
+        type="text"
+        bind:value={newItem}
+        placeholder="New Option"
+        bind:this={newItemInput}
+        on:keypress={handleKeyPress}
+      />
+      <button on:click={addItem}>Add Option</button>
+    </div>
 
     <ul>
       {#each items as { text, color }, index}
@@ -152,7 +154,10 @@
     <p>The dice is being thrown...</p>
     <ul>
       {#each items as { text, color }, index}
-        <li class="{highlightedIndex === index ? 'highlighted' : ''}" style="background-color: {color};">
+        <li
+          class={highlightedIndex === index ? "highlighted" : ""}
+          style="background-color: {color};"
+        >
           {text}
         </li>
       {/each}
@@ -161,7 +166,12 @@
 {:else if currentStep === 3}
   <div>
     {#if items.length > 1 && randomChoice}
-      <p>The random choice is: <span style="background-color: {randomChoice.color}; color: white; padding: 0.2em; border-radius: 3px;">{randomChoice.text}</span></p>
+      <p>
+        The random choice is: <span
+          style="background-color: {randomChoice.color}; color: white; padding: 0.2em; border-radius: 3px;"
+          >{randomChoice.text}</span
+        >
+      </p>
     {:else}
       <p>There must be at least two options.</p>
     {/if}
@@ -172,7 +182,12 @@
     </div>
     <ul>
       {#each items as { text, color }, index}
-        <li class="{randomChoice && randomChoice.text === text ? 'highlighted' : ''}" style="background-color: {color};">
+        <li
+          class={randomChoice && randomChoice.text === text
+            ? "highlighted"
+            : ""}
+          style="background-color: {color};"
+        >
           {text}
         </li>
       {/each}
@@ -215,10 +230,6 @@
   }
 
   #new_item_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5em;
     margin: 8px;
   }
 
@@ -238,6 +249,6 @@
     font-weight: bold;
     text-decoration: underline;
     color: white;
-    background-color: #007BFF;
+    background-color: #007bff;
   }
 </style>
