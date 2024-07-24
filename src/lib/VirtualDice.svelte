@@ -234,6 +234,7 @@
   }
 
   .breadcrumb {
+    font-size: 0.9rem;
     display: flex;
     justify-content: center;
     gap: 1em;
