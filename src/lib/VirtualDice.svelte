@@ -195,23 +195,27 @@
 
     <div class="prefilled-options">
       <h3>Prefilled Options:</h3>
-      {#each Object.keys(prefilledOptions) as option}
-        <button on:click={() => setPrefilledOptions(prefilledOptions[option])}
-          >{option}</button
-        >
-      {/each}
-      {#each Object.keys(customOptions) as customOption}
-        <div class="custom-option">
-          <button
-            on:click={() => setPrefilledOptions(customOptions[customOption])}
-            >{customOption}
-            <button
-              class="delete-button"
-              on:click={(e) => deleteCustomOptions(customOption, e)}>✖</button
-            ></button
+      <div class="prefilled-options-container">
+        {#each Object.keys(prefilledOptions) as option}
+          <button on:click={() => setPrefilledOptions(prefilledOptions[option])}
+            >{option}</button
           >
-        </div>
-      {/each}
+        {/each}
+        {#each Object.keys(customOptions) as customOption}
+          <div class="custom-option">
+            <button
+              on:click={() => setPrefilledOptions(customOptions[customOption])}
+              >{customOption}
+              <button
+                class="delete-button"
+                title="Delete prefilled option"
+                on:click={(e) => deleteCustomOptions(customOption, e)}
+                >✖</button
+              ></button
+            >
+          </div>
+        {/each}
+      </div>
     </div>
   </div>
 {:else if currentStep === 2}
@@ -283,6 +287,7 @@
 
   .controls {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin-top: 3em;
     gap: 1em;
@@ -344,5 +349,12 @@
     border: none;
     color: red;
     line-height: 0;
+  }
+
+  .prefilled-options-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
   }
 </style>
