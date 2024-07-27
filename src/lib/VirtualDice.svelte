@@ -186,10 +186,10 @@
     <div class="controls">
       <div class="button-group">
         {#if items.length > 1}
-          <button on:click={throwDice}>Throw Dice!</button>
+          <button class="primary-button" on:click={throwDice}>Throw Dice!</button>
           <button on:click={handleSave}>Save Options</button>
         {/if}
-        <button on:click={clearOptions}>Clear Options</button>
+        <button class="destructive-button" on:click={clearOptions}>Clear Options</button>
       </div>
     </div>
 
@@ -247,9 +247,9 @@
     {/if}
 
     <div class="controls">
-      <button on:click={backToOptions}>Modify Options</button>
+      <button class="primary-button" on:click={backToOptions}>Modify Options</button>
       <button on:click={throwDice}>Rethrow Dice</button>
-      <button on:click={clearItems}>Start Over</button>
+      <button class="destructive-button" on:click={clearItems}>Start Over</button>
       <button on:click={handleSave}>Save Options</button>
     </div>
     <ul>
@@ -356,5 +356,23 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 1em;
+  }
+
+  .primary-button {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .primary-button:hover {
+    background-color: #0056b3;
+  }
+
+  .destructive-button {
+    background-color: red;
+    color: white;
+  }
+
+  .destructive-button:hover {
+    background-color: darkred;
   }
 </style>
