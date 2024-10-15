@@ -5,17 +5,17 @@
   let randomChoice: { text: string; color: string } | null = null;
   let rolling: boolean = false;
   let newItemInput: HTMLInputElement;
-  let highlightedIndex: number | null = null;
+  let highlightedChoice: { text: string; color: string } | null = null;
   let customOptions: Record<string, string[]> = loadCustomOptions();
 
   function generateDistinctColors(amount: number): string[] {
     const colors: string[] = [];
-    const step = 360 / amount; // Divide the color wheel into equal parts
-    const maxColors = 360; // Reasonable upper limit
+    const step = 360 / amount;
+    const maxColors = 360;
 
     for (let i = 0; i < Math.min(amount, maxColors); i++) {
       const hue = i * step;
-      const color = `hsl(${hue}, 60%, 80%)`; // Pastel colors with lower saturation and higher lightness
+      const color = `hsl(${hue}, 40%, 40%)`;
       colors.push(color);
     }
 
@@ -92,25 +92,20 @@
     if (items.length > 0) {
       rolling = true;
       currentStep = 2;
-      let currentIndex = 0;
+      const startTime = Date.now();
 
       const highlightNext = () => {
-        highlightedIndex = currentIndex;
+        const randomIndex = Math.floor(Math.random() * items.length);
+        highlightedChoice = items[randomIndex];
 
-        if (currentIndex < items.length - 1) {
-          currentIndex++;
-        } else {
-          const randomIndex = Math.floor(Math.random() * items.length);
+        if (Date.now() - startTime > 3000) {
           randomChoice = items[randomIndex];
-          highlightedIndex = randomIndex;
-          setTimeout(() => {
-            rolling = false;
-            currentStep = 3;
-          }, 1000); // Show the final choice for 1 second
+          rolling = false;
+          currentStep = 3;
           return;
         }
 
-        setTimeout(highlightNext, 200); // Highlight each option for 200ms
+        setTimeout(highlightNext, 200);
       };
 
       highlightNext();
@@ -128,7 +123,7 @@
   const backToOptions = () => {
     currentStep = 1;
     randomChoice = null;
-    highlightedIndex = null;
+    highlightedChoice= null;
   };
 
   const prefilledOptions: Record<string, string[]> = {
@@ -170,7 +165,7 @@
 
     <ul>
       {#each items as { text, color }, index}
-        <li style="background-color: {color};">
+        <li class="dice-option" style="background-color: {color};">
           <input
             id="item_{index}_input"
             type="text"
@@ -186,10 +181,12 @@
     <div class="controls">
       <div class="button-group">
         {#if items.length > 1}
-          <button class="primary-button" on:click={throwDice}>Throw Dice!</button>
+          <button class="primary" on:click={throwDice}>Throw Dice!</button>
           <button on:click={handleSave}>Save Options</button>
         {/if}
-        <button class="destructive-button" on:click={clearOptions}>Clear Options</button>
+        <button class="destructive-button" on:click={clearOptions}
+          >Clear Options</button
+        >
       </div>
     </div>
 
@@ -207,7 +204,7 @@
               on:click={() => setPrefilledOptions(customOptions[customOption])}
               >{customOption}
               <button
-                class="delete-button"
+                class="destructive"
                 title="Delete prefilled option"
                 on:click={(e) => deleteCustomOptions(customOption, e)}
                 >✖</button
@@ -218,52 +215,31 @@
       </div>
     </div>
   </div>
-{:else if currentStep === 2}
+{:else if currentStep === 2 && highlightedChoice}
   <div>
-    <div class="controls"></div>
-    <p>The dice is being thrown...</p>
-    <ul>
-      {#each items as { text, color }, index}
-        <li
-          class={highlightedIndex === index ? "highlighted" : ""}
-          style="background-color: {color};"
-        >
-          {text}
-        </li>
-      {/each}
-    </ul>
+    <p>
+      <span
+        style="background-color: {highlightedChoice.color};"
+        class="highlighted-choice">{highlightedChoice.text}</span
+      >
+    </p>
   </div>
-{:else if currentStep === 3}
+{:else if currentStep === 3 && randomChoice}
   <div>
-    {#if items.length > 1 && randomChoice}
       <p>
-        The random choice is: <span
-          style="background-color: {randomChoice.color}; color: white; padding: 0.2em; border-radius: 3px;"
-          >{randomChoice.text}</span
+        <span
+          style="background-color: {randomChoice.color};"
+          class="highlighted-choice">{randomChoice.text}</span
         >
       </p>
-    {:else}
-      <p>There must be at least two options.</p>
-    {/if}
-
     <div class="controls">
-      <button class="primary-button" on:click={backToOptions}>Modify Options</button>
+      <button class="primary" on:click={backToOptions}>Modify Options</button>
       <button on:click={throwDice}>Rethrow Dice</button>
-      <button class="destructive-button" on:click={clearItems}>Start Over</button>
+      <button class="destructive-button" on:click={clearItems}
+        >Start Over</button
+      >
       <button on:click={handleSave}>Save Options</button>
     </div>
-    <ul>
-      {#each items as { text, color }, index}
-        <li
-          class={randomChoice && randomChoice.text === text
-            ? "highlighted"
-            : ""}
-          style="background-color: {color};"
-        >
-          {text}
-        </li>
-      {/each}
-    </ul>
   </div>
 {/if}
 
@@ -273,11 +249,15 @@
     padding: 0;
   }
 
-  li {
+  li.dice-option {
     margin-bottom: 0.5em;
     padding: 0.5em;
     border-radius: 5px;
     color: white;
+    display: flex;
+    margin: 1rem;
+    display: flex;
+    gap: 0.1rem;
   }
 
   input[type="text"] {
@@ -298,13 +278,10 @@
     gap: 0.5em;
   }
 
-  .highlighted {
-    border: 2px solid white;
-    transform: scale(1.05);
-  }
-
   #new_item_container {
-    margin: 8px;
+    margin: 1rem;
+    display: flex;
+    gap: 0.1rem;
   }
 
   .breadcrumb {
@@ -324,7 +301,6 @@
     font-weight: bold;
     text-decoration: underline;
     color: white;
-    background-color: #007bff;
   }
 
   .prefilled-options {
@@ -344,35 +320,22 @@
     gap: 0.5em;
   }
 
-  .delete-button {
-    background-color: transparent;
-    border: none;
-    color: red;
-    line-height: 0;
-  }
-
   .prefilled-options-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1em;
+    max-width: 50rem;
   }
 
-  .primary-button {
-    background-color: #007bff;
-    color: white;
-  }
-
-  .primary-button:hover {
-    background-color: #0056b3;
-  }
-
-  .destructive-button {
-    background-color: red;
-    color: white;
-  }
-
-  .destructive-button:hover {
-    background-color: darkred;
+  .highlighted-choice {
+    color: var(--highlight-text);
+    padding: 0.3em 0.5em;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    text-shadow: #000 0px 0px 1px;
+    -webkit-font-smoothing: antialiased;
   }
 </style>
