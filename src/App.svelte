@@ -3,18 +3,23 @@
 </script>
 
 <main>
-  <h1>Noppa 🎲 — A Virtual Dice</h1>
-
-  <VirtualDice />
+  <h1>Noppa 🎲</h1>
 
   <p class="read-the-docs">
-    A dice for any options: An app (PWA) for randomly picking an option from a a
-    list which the user can enter.
+    A dice for any options: A PWA app for randomly picking an option from a list
+    which the user can enter.
   </p>
+  <VirtualDice />
 </main>
+<footer>
+  <p>
+    © Atte Virtanen {new Date().getFullYear()}
+  </p>
+</footer>
 
 <style>
   .read-the-docs {
     color: #888;
+    margin-bottom: 2rem;
   }
 </style>
