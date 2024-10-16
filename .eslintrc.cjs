@@ -17,11 +17,11 @@ module.exports = {
   ignorePatterns: ["svelte.config.js"],
   rules: {
     "comma-dangle": ["error", {
-        "arrays": "never",
-        "objects": "always-multiline",
-        "imports": "never",
-        "exports": "never",
-        "functions": "never"
+      "arrays": "never",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never"
     }]
   },
 };

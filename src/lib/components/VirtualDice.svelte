@@ -3,7 +3,7 @@
   import { generateDistinctColors } from "../utils/colors";
   import {
     PREFILLED_OPTIONS,
-    UserPrefilledOptionPersistence
+    UserPrefilledOptionPersistence,
   } from "../utils/prefilledOptions";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
