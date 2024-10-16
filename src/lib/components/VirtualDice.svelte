@@ -1,10 +1,15 @@
 <script lang="ts">
-  let items: { text: string; color: string }[] = [];
-  let newItem: string = "";
+  import ConfirmDialog from "./ConfirmDialog.svelte";
+  import InputDialog from "./InputDialog.svelte";
+  let confirmDialog: ConfirmDialog;
+  let inputDialog: InputDialog;
+
+  let options: { text: string; color: string }[] = [];
+  let newOption: string = "";
   let currentStep: number = 1;
   let randomChoice: { text: string; color: string } | null = null;
   let rolling: boolean = false;
-  let newItemInput: HTMLInputElement;
+  let newOptionInput: HTMLInputElement;
   let highlightedChoice: { text: string; color: string } | null = null;
   let customOptions: Record<string, string[]> = loadCustomOptions();
 
@@ -23,8 +28,11 @@
   }
 
   function updateColors() {
-    const colors = generateDistinctColors(items.length);
-    items = items.map((item, index) => ({ ...item, color: colors[index] }));
+    const colors = generateDistinctColors(options.length);
+    options = options.map((option, index) => ({
+      ...option,
+      color: colors[index],
+    }));
   }
 
   function loadCustomOptions(): Record<string, string[]> {
@@ -37,11 +45,12 @@
     localStorage.setItem("customOptions", JSON.stringify(customOptions));
   }
 
-  function deleteCustomOptions(name: string, target: Event) {
+  async function deleteCustomOptions(name: string, target: Event) {
     target.stopPropagation();
-    if (
-      confirm(`Are you sure you want to delete the custom option: "${name}"?`)
-    ) {
+    const isConfirmed = await confirmDialog.open(
+      `Are you sure you want to delete the custom option: "${name}"?`
+    );
+    if (isConfirmed) {
       customOptions = Object.fromEntries(
         Object.entries(customOptions).filter(([key]) => key !== name)
       );
@@ -49,81 +58,82 @@
     }
   }
 
-  const addItem = () => {
-    if (newItem.trim()) {
-      items = [...items, { text: newItem, color: "" }];
-      newItem = "";
-      newItemInput.focus(); // Focus the input element
+  const addOption = () => {
+    if (newOption.trim()) {
+      options = [...options, { text: newOption, color: "" }];
+      newOption = "";
+      newOptionInput.focus(); // Focus the input element
       updateColors();
     }
   };
 
-  const setPrefilledOptions = (options: string[]) => {
-    items = options.map((text) => ({ text, color: "" }));
+  const setPrefilledOptions = (_options: string[]) => {
+    options = _options.map((text) => ({ text, color: "" }));
     updateColors();
   };
 
-  const deleteItem = (index: number) => {
-    items = items.filter((_, i) => i !== index);
+  const deleteOption = (index: number) => {
+    options = options.filter((_, i) => i !== index);
     updateColors();
   };
 
-  const editItem = (index: number, newValue: string) => {
-    items = items.map((item, i) =>
+  const editOption = (index: number, newValue: string) => {
+    options = options.map((item, i) =>
       i === index ? { ...item, text: newValue } : item
     );
   };
 
-  const clearItems = () => {
-    items = [];
+  const startOver = () => {
+    clearOptions();
     randomChoice = null;
     currentStep = 1;
   };
 
   const clearOptions = () => {
-    items = [];
+    options = [];
   };
 
-  const handleInputChanged = (event: Event, index: number) => {
-    editItem(index, (event.target as HTMLInputElement).value);
+  const handleOptionInputChanged = (event: Event, index: number) => {
+    editOption(index, (event.target as HTMLInputElement).value);
   };
 
   const throwDice = () => {
-    if (items.length > 0) {
-      rolling = true;
-      currentStep = 2;
-      const startTime = Date.now();
-
-      const highlightNext = () => {
-        const randomIndex = Math.floor(Math.random() * items.length);
-        highlightedChoice = items[randomIndex];
-
-        if (Date.now() - startTime > 3000) {
-          randomChoice = items[randomIndex];
-          rolling = false;
-          currentStep = 3;
-          return;
-        }
-
-        setTimeout(highlightNext, 200);
-      };
-
-      highlightNext();
-    } else {
-      alert("No items to choose from.");
+    if (options.length === 0) {
+      console.warn("throwDice: No options to choose from.");
+      return;
     }
+
+    rolling = true;
+    currentStep = 2;
+    const startTime = Date.now();
+
+    const highlightNext = () => {
+      const randomIndex = Math.floor(Math.random() * options.length);
+      highlightedChoice = options[randomIndex];
+
+      if (Date.now() - startTime > 3000) {
+        randomChoice = options[randomIndex];
+        rolling = false;
+        currentStep = 3;
+        return;
+      }
+
+      setTimeout(highlightNext, 200);
+    };
+
+    highlightNext();
   };
 
-  const handleKeyPress = (event: KeyboardEvent) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
-      addItem();
+      addOption();
     }
   };
 
   const backToOptions = () => {
     currentStep = 1;
     randomChoice = null;
-    highlightedChoice= null;
+    highlightedChoice = null;
   };
 
   const prefilledOptions: Record<string, string[]> = {
@@ -132,12 +142,14 @@
     Direction: ["Left", "Straight", "Right"],
   };
 
-  function handleSave() {
-    const name = prompt("Enter a name for your prefilled options:");
+  async function handleSaveCustomOptions() {
+    const name = await inputDialog.open(
+      "Enter a name for your prefilled options:"
+    );
     if (name) {
       saveCustomOptions(
         name,
-        items.map((item) => item.text)
+        options.map((item) => item.text)
       );
     }
   }
@@ -151,38 +163,40 @@
 
 {#if currentStep === 1}
   <div>
-    <div id="new_item_container">
+    <div id="new-option-container">
       <input
         id="new_item_input"
+        class="option-input"
         type="text"
-        bind:value={newItem}
+        bind:value={newOption}
         placeholder="New Option"
-        bind:this={newItemInput}
-        on:keypress={handleKeyPress}
+        bind:this={newOptionInput}
+        on:keydown={handleKeyDown}
       />
-      <button on:click={addItem}>Add Option</button>
+      <button on:click={addOption}>Add Option</button>
     </div>
 
     <ul>
-      {#each items as { text, color }, index}
+      {#each options as { text, color }, index}
         <li class="dice-option" style="background-color: {color};">
           <input
             id="item_{index}_input"
+            class="option-input"
             type="text"
-            bind:value={items[index].text}
-            on:input={(e) => handleInputChanged(e, index)}
+            bind:value={options[index].text}
+            on:input={(e) => handleOptionInputChanged(e, index)}
             style="background-color: {color}; color: white;"
           />
-          <button on:click={() => deleteItem(index)}>Delete</button>
+          <button on:click={() => deleteOption(index)}>Delete</button>
         </li>
       {/each}
     </ul>
 
     <div class="controls">
       <div class="button-group">
-        {#if items.length > 1}
+        {#if options.length > 1}
           <button class="primary" on:click={throwDice}>Throw Dice!</button>
-          <button on:click={handleSave}>Save Options</button>
+          <button on:click={handleSaveCustomOptions}>Save Options</button>
         {/if}
         <button class="destructive-button" on:click={clearOptions}
           >Clear Options</button
@@ -226,22 +240,24 @@
   </div>
 {:else if currentStep === 3 && randomChoice}
   <div>
-      <p>
-        <span
-          style="background-color: {randomChoice.color};"
-          class="highlighted-choice">{randomChoice.text}</span
-        >
-      </p>
+    <p>
+      <span
+        style="background-color: {randomChoice.color};"
+        class="highlighted-choice">{randomChoice.text}</span
+      >
+    </p>
     <div class="controls">
       <button class="primary" on:click={backToOptions}>Modify Options</button>
       <button on:click={throwDice}>Rethrow Dice</button>
-      <button class="destructive-button" on:click={clearItems}
-        >Start Over</button
+      <button class="destructive-button" on:click={startOver}>Start Over</button
       >
-      <button on:click={handleSave}>Save Options</button>
+      <button on:click={handleSaveCustomOptions}>Save Options</button>
     </div>
   </div>
 {/if}
+
+<ConfirmDialog bind:this={confirmDialog} />
+<InputDialog bind:this={inputDialog} />
 
 <style>
   ul {
@@ -260,7 +276,7 @@
     gap: 0.1rem;
   }
 
-  input[type="text"] {
+  input.option-input {
     font-size: 1.5rem;
     margin-right: 0.5em;
   }
@@ -278,7 +294,7 @@
     gap: 0.5em;
   }
 
-  #new_item_container {
+  #new-option-container {
     margin: 1rem;
     display: flex;
     gap: 0.1rem;
