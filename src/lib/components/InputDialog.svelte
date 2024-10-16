@@ -8,7 +8,7 @@
 
   export function open(
     message: string,
-    defaultValue: string = "",
+    defaultValue: string = ""
   ): Promise<string | null> {
     _message = message;
     inputValue = defaultValue;

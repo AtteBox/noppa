@@ -15,4 +15,12 @@ module.exports = {
     },
   ],
   ignorePatterns: ["svelte.config.js"],
+  rules: {
+    "comma-dangle": ["error", {
+        "arrays": "never",
+        "imports": "never",
+        "exports": "never",
+        "functions": "never"
+    }]
+  },
 };
