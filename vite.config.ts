@@ -13,7 +13,7 @@ export default defineConfig({
         name: "Noppa — A Virtual Dice",
         short_name: "Noppa",
         description:
-          "A dice for any options: An app (PWA) for randomly picking an option from a a list which the user can enter.",
+          "A dice for any options: An app (PWA) for randomly picking an option from a list which the user can enter.",
         theme_color: "#000000",
         icons: [
           {
