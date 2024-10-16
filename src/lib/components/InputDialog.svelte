@@ -1,6 +1,6 @@
 <script lang="ts">
   let isOpen = false;
-  let _message = "";
+  let msg = "";
   let defaultValue = "";
 
   let inputValue = defaultValue;
@@ -10,7 +10,7 @@
     message: string,
     defaultValue: string = ""
   ): Promise<string | null> {
-    _message = message;
+    msg = message;
     inputValue = defaultValue;
     isOpen = true;
     return new Promise((res) => {
@@ -36,7 +36,7 @@
       aria-modal="true"
       aria-labelledby="input-dialog-message"
     >
-      <p id="input-dialog-message">{_message}</p>
+      <p id="input-dialog-message">{msg}</p>
       <input
         type="text"
         bind:value={inputValue}

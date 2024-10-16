@@ -141,7 +141,7 @@
   <span class={currentStep === Steps.Result ? "active" : ""}>3. Result</span>
 </div>
 
-{#if currentStep === 1}
+{#if currentStep === Steps.DefineOptions}
   <div>
     <div id="new-option-container">
       <input
@@ -183,7 +183,7 @@
       />
     </div>
   </div>
-{:else if currentStep === 2 && animationShownOption}
+{:else if currentStep === Steps.ThrowingDice && animationShownOption}
   <div>
     <p>
       <span
@@ -192,7 +192,7 @@
       >
     </p>
   </div>
-{:else if currentStep === 3 && randomResultOption}
+{:else if currentStep === Steps.Result && randomResultOption}
   <div>
     <p>
       <span
