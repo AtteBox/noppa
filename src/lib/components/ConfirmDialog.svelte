@@ -24,7 +24,7 @@
 </script>
 
 {#if isOpen}
-  <div class="modal-backdrop" aria-hidden="true">
+  <div class="modal-backdrop">
     <div
       class="modal"
       role="dialog"

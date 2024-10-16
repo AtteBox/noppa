@@ -1,30 +1,42 @@
 <script lang="ts">
+  import type { IOption, IPrefilledOptionLists } from "../domain";
+  import { generateDistinctColors } from "../utils/colors";
+  import {
+    PREFILLED_OPTIONS,
+    UserPrefilledOptionPersistence,
+  } from "../utils/prefilledOptions";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
+  import OptionList from "./OptionList.svelte";
+  import PrefilledOptionList from "./PrefilledOptionList.svelte";
   let confirmDialog: ConfirmDialog;
   let inputDialog: InputDialog;
 
-  let options: { text: string; color: string }[] = [];
-  let newOption: string = "";
-  let currentStep: number = 1;
-  let randomChoice: { text: string; color: string } | null = null;
-  let rolling: boolean = false;
+  const Steps = {
+    DefineOptions: 1,
+    ThrowingDice: 2,
+    Result: 3,
+  } as const;
+  type IStep = (typeof Steps)[keyof typeof Steps];
+
+  let options: IOption[] = [];
+  let newOptionText: string = "";
+  let currentStep: IStep = Steps.DefineOptions;
+  let randomResultOption: IOption | null = null;
   let newOptionInput: HTMLInputElement;
-  let highlightedChoice: { text: string; color: string } | null = null;
-  let customOptions: Record<string, string[]> = loadCustomOptions();
+  let animationShownOption: IOption | null = null;
+  let userPrefilledOptions: IPrefilledOptionLists =
+    UserPrefilledOptionPersistence.load();
 
-  function generateDistinctColors(amount: number): string[] {
-    const colors: string[] = [];
-    const step = 360 / amount;
-    const maxColors = 360;
+  $: UserPrefilledOptionPersistence.save(userPrefilledOptions);
 
-    for (let i = 0; i < Math.min(amount, maxColors); i++) {
-      const hue = i * step;
-      const color = `hsl(${hue}, 40%, 40%)`;
-      colors.push(color);
-    }
+  $: if (options.length) {
+    updateColors();
+  }
 
-    return colors;
+  $: if (currentStep === Steps.DefineOptions) {
+    randomResultOption = null;
+    animationShownOption = null;
   }
 
   function updateColors() {
@@ -35,66 +47,58 @@
     }));
   }
 
-  function loadCustomOptions(): Record<string, string[]> {
-    const saved = localStorage.getItem("customOptions");
-    return saved ? JSON.parse(saved) : {};
+  function saveUserPrefilledOptions(name: string, options: string[]) {
+    if (name.trim()) {
+      userPrefilledOptions = { ...userPrefilledOptions, [name]: options };
+    }
   }
 
-  function saveCustomOptions(name: string, options: string[]) {
-    customOptions = { ...customOptions, [name]: options };
-    localStorage.setItem("customOptions", JSON.stringify(customOptions));
-  }
-
-  async function deleteCustomOptions(name: string, target: Event) {
-    target.stopPropagation();
+  async function deleteUserPrefilledOptions(name: string) {
     const isConfirmed = await confirmDialog.open(
       `Are you sure you want to delete the custom option: "${name}"?`
     );
     if (isConfirmed) {
-      customOptions = Object.fromEntries(
-        Object.entries(customOptions).filter(([key]) => key !== name)
+      userPrefilledOptions = Object.fromEntries(
+        Object.entries(userPrefilledOptions).filter(([key]) => key !== name)
       );
-      localStorage.setItem("customOptions", JSON.stringify(customOptions));
+    }
+  }
+
+  async function saveOptionsAsUserPrefilledOptions() {
+    const name = await inputDialog.open(
+      "Enter a name for your prefilled options:"
+    );
+    if (name) {
+      saveUserPrefilledOptions(
+        name,
+        options.map((item) => item.text)
+      );
     }
   }
 
   const addOption = () => {
-    if (newOption.trim()) {
-      options = [...options, { text: newOption, color: "" }];
-      newOption = "";
-      newOptionInput.focus(); // Focus the input element
-      updateColors();
+    if (newOptionText.trim()) {
+      options = [...options, { text: newOptionText, color: "" }];
+      newOptionText = "";
+      newOptionInput.focus();
     }
   };
 
-  const setPrefilledOptions = (_options: string[]) => {
-    options = _options.map((text) => ({ text, color: "" }));
-    updateColors();
-  };
-
-  const deleteOption = (index: number) => {
-    options = options.filter((_, i) => i !== index);
-    updateColors();
-  };
-
-  const editOption = (index: number, newValue: string) => {
-    options = options.map((item, i) =>
-      i === index ? { ...item, text: newValue } : item
-    );
-  };
-
-  const startOver = () => {
-    clearOptions();
-    randomChoice = null;
-    currentStep = 1;
+  const setOptions = (selectedOptions: string[]) => {
+    options = selectedOptions.map((text) => ({ text, color: "" }));
   };
 
   const clearOptions = () => {
     options = [];
   };
 
-  const handleOptionInputChanged = (event: Event, index: number) => {
-    editOption(index, (event.target as HTMLInputElement).value);
+  const startOver = () => {
+    clearOptions();
+    currentStep = Steps.DefineOptions;
+  };
+
+  const backToOptions = () => {
+    currentStep = Steps.DefineOptions;
   };
 
   const throwDice = () => {
@@ -103,100 +107,65 @@
       return;
     }
 
-    rolling = true;
-    currentStep = 2;
+    currentStep = Steps.ThrowingDice;
+    const rollDuration = 3000;
+    const diceAnimationInterval = 200;
     const startTime = Date.now();
 
-    const highlightNext = () => {
+    const intervalId = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * options.length);
-      highlightedChoice = options[randomIndex];
+      animationShownOption = options[randomIndex];
 
-      if (Date.now() - startTime > 3000) {
-        randomChoice = options[randomIndex];
-        rolling = false;
-        currentStep = 3;
-        return;
+      if (Date.now() - startTime > rollDuration) {
+        clearInterval(intervalId);
+        randomResultOption = options[randomIndex];
+        currentStep = Steps.Result;
       }
-
-      setTimeout(highlightNext, 200);
-    };
-
-    highlightNext();
+    }, diceAnimationInterval);
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleNewOptionKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       addOption();
     }
   };
-
-  const backToOptions = () => {
-    currentStep = 1;
-    randomChoice = null;
-    highlightedChoice = null;
-  };
-
-  const prefilledOptions: Record<string, string[]> = {
-    "Dice Numbers": ["1", "2", "3", "4", "5", "6"],
-    "Coin Flip": ["Heads", "Tails"],
-    Direction: ["Left", "Straight", "Right"],
-  };
-
-  async function handleSaveCustomOptions() {
-    const name = await inputDialog.open(
-      "Enter a name for your prefilled options:"
-    );
-    if (name) {
-      saveCustomOptions(
-        name,
-        options.map((item) => item.text)
-      );
-    }
-  }
 </script>
 
 <div class="breadcrumb">
-  <span class={currentStep === 1 ? "active" : ""}>Step 1: Create Options</span>
-  <span class={currentStep === 2 ? "active" : ""}>Step 2: Throwing Dice</span>
-  <span class={currentStep === 3 ? "active" : ""}>Step 3: Result</span>
+  <span class={currentStep === Steps.DefineOptions ? "active" : ""}
+    >1. Define Options</span
+  >
+  <span class={currentStep === Steps.ThrowingDice ? "active" : ""}
+    >2. Throwing Dice</span
+  >
+  <span class={currentStep === Steps.Result ? "active" : ""}>3. Result</span>
 </div>
 
 {#if currentStep === 1}
   <div>
     <div id="new-option-container">
       <input
-        id="new_item_input"
+        id="new-option-input"
         class="option-input"
         type="text"
-        bind:value={newOption}
+        bind:value={newOptionText}
         placeholder="New Option"
         bind:this={newOptionInput}
-        on:keydown={handleKeyDown}
+        on:keydown={handleNewOptionKeyDown}
+        aria-label="New Option Text"
       />
       <button on:click={addOption}>Add Option</button>
     </div>
 
-    <ul>
-      {#each options as { text, color }, index}
-        <li class="dice-option" style="background-color: {color};">
-          <input
-            id="item_{index}_input"
-            class="option-input"
-            type="text"
-            bind:value={options[index].text}
-            on:input={(e) => handleOptionInputChanged(e, index)}
-            style="background-color: {color}; color: white;"
-          />
-          <button on:click={() => deleteOption(index)}>Delete</button>
-        </li>
-      {/each}
-    </ul>
+    <OptionList bind:options />
 
     <div class="controls">
       <div class="button-group">
         {#if options.length > 1}
           <button class="primary" on:click={throwDice}>Throw Dice!</button>
-          <button on:click={handleSaveCustomOptions}>Save Options</button>
+          <button on:click={saveOptionsAsUserPrefilledOptions}
+            >Save Options</button
+          >
         {/if}
         <button class="destructive-button" on:click={clearOptions}
           >Clear Options</button
@@ -206,44 +175,29 @@
 
     <div class="prefilled-options">
       <h3>Prefilled Options:</h3>
-      <div class="prefilled-options-container">
-        {#each Object.keys(prefilledOptions) as option}
-          <button on:click={() => setPrefilledOptions(prefilledOptions[option])}
-            >{option}</button
-          >
-        {/each}
-        {#each Object.keys(customOptions) as customOption}
-          <div class="custom-option">
-            <button
-              on:click={() => setPrefilledOptions(customOptions[customOption])}
-              >{customOption}
-              <button
-                class="destructive"
-                title="Delete prefilled option"
-                on:click={(e) => deleteCustomOptions(customOption, e)}
-                >✖</button
-              ></button
-            >
-          </div>
-        {/each}
-      </div>
+      <PrefilledOptionList
+        prefilledOptions={PREFILLED_OPTIONS}
+        {userPrefilledOptions}
+        {setOptions}
+        {deleteUserPrefilledOptions}
+      />
     </div>
   </div>
-{:else if currentStep === 2 && highlightedChoice}
+{:else if currentStep === 2 && animationShownOption}
   <div>
     <p>
       <span
-        style="background-color: {highlightedChoice.color};"
-        class="highlighted-choice">{highlightedChoice.text}</span
+        style="background-color: {animationShownOption.color};"
+        class="highlighted-choice">{animationShownOption.text}</span
       >
     </p>
   </div>
-{:else if currentStep === 3 && randomChoice}
+{:else if currentStep === 3 && randomResultOption}
   <div>
     <p>
       <span
-        style="background-color: {randomChoice.color};"
-        class="highlighted-choice">{randomChoice.text}</span
+        style="background-color: {randomResultOption.color};"
+        class="highlighted-choice">{randomResultOption.text}</span
       >
     </p>
     <div class="controls">
@@ -251,7 +205,7 @@
       <button on:click={throwDice}>Rethrow Dice</button>
       <button class="destructive-button" on:click={startOver}>Start Over</button
       >
-      <button on:click={handleSaveCustomOptions}>Save Options</button>
+      <button on:click={saveOptionsAsUserPrefilledOptions}>Save Options</button>
     </div>
   </div>
 {/if}
@@ -260,22 +214,6 @@
 <InputDialog bind:this={inputDialog} />
 
 <style>
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li.dice-option {
-    margin-bottom: 0.5em;
-    padding: 0.5em;
-    border-radius: 5px;
-    color: white;
-    display: flex;
-    margin: 1rem;
-    display: flex;
-    gap: 0.1rem;
-  }
-
   input.option-input {
     font-size: 1.5rem;
     margin-right: 0.5em;
@@ -322,26 +260,6 @@
   .prefilled-options {
     margin-top: 2em;
     text-align: center;
-  }
-
-  .prefilled-options button {
-    margin: 0.5em;
-    padding: 0.5em 1em;
-  }
-
-  .custom-option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-  }
-
-  .prefilled-options-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1em;
-    max-width: 50rem;
   }
 
   .highlighted-choice {
