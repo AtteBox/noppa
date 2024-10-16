@@ -1,5 +1,5 @@
 <script lang="ts">
-  import VirtualDice from "./lib/VirtualDice.svelte";
+  import VirtualDice from "./lib/components/VirtualDice.svelte";
 </script>
 
 <main>
