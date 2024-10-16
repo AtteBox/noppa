@@ -55,23 +55,23 @@
 
   async function deleteUserPrefilledOptions(name: string) {
     const isConfirmed = await confirmDialog.open(
-      `Are you sure you want to delete the custom option: "${name}"?`
+      `Are you sure you want to delete the custom option: "${name}"?`,
     );
     if (isConfirmed) {
       userPrefilledOptions = Object.fromEntries(
-        Object.entries(userPrefilledOptions).filter(([key]) => key !== name)
+        Object.entries(userPrefilledOptions).filter(([key]) => key !== name),
       );
     }
   }
 
   async function saveOptionsAsUserPrefilledOptions() {
     const name = await inputDialog.open(
-      "Enter a name for your prefilled options:"
+      "Enter a name for your prefilled options:",
     );
     if (name) {
       saveUserPrefilledOptions(
         name,
-        options.map((item) => item.text)
+        options.map((item) => item.text),
       );
     }
   }
