@@ -1,6 +1,6 @@
 <script lang="ts">
   let isOpen = false;
-  let _message = "";
+  let msg = "";
   let defaultValue = "";
 
   let inputValue = defaultValue;
@@ -10,7 +10,7 @@
     message: string,
     defaultValue: string = ""
   ): Promise<string | null> {
-    _message = message;
+    msg = message;
     inputValue = defaultValue;
     isOpen = true;
     return new Promise((res) => {
@@ -29,15 +29,19 @@
 </script>
 
 {#if isOpen}
-<div class="modal-backdrop">
-  <div
-    class="modal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="input-dialog-message"
-  >
-    <p id="input-dialog-message">{_message}</p>
-      <input type="text" bind:value={inputValue} aria-labelledby="input-dialog-message" />
+  <div class="modal-backdrop">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="input-dialog-message"
+    >
+      <p id="input-dialog-message">{msg}</p>
+      <input
+        type="text"
+        bind:value={inputValue}
+        aria-labelledby="input-dialog-message"
+      />
       <div class="modal-buttons">
         <button class="primary" on:click={submit}>OK</button>
         <button on:click={cancel}>Cancel</button>
