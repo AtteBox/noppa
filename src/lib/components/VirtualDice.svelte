@@ -15,7 +15,7 @@
   const Steps = {
     DefineOptions: 1,
     ThrowingDice: 2,
-    Result: 3
+    Result: 3,
   } as const;
   type IStep = (typeof Steps)[keyof typeof Steps];
 
@@ -43,7 +43,7 @@
     const colors = generateDistinctColors(options.length);
     options = options.map((option, index) => ({
       ...option,
-      color: colors[index]
+      color: colors[index],
     }));
   }
 
