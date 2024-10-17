@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { tick } from "svelte";
+
   let isOpen = false;
   let msg = "";
   let defaultValue = "";
@@ -26,6 +28,11 @@
     resolve(null);
     isOpen = false;
   }
+
+	async function autofocus(el: HTMLElement) {
+		await tick();
+		el.focus();
+	}
 </script>
 
 {#if isOpen}
