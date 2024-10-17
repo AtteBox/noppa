@@ -57,7 +57,7 @@
 
   .user-option-scroll-container {
     margin-top: 1.5rem;
-    overflow-y: auto;
+    overflow: auto;
     max-height: 20rem;
     max-width: 50rem;
   }
