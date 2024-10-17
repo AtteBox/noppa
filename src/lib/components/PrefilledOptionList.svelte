@@ -24,8 +24,7 @@
         <button
           class="destructive"
           title="Delete prefilled option"
-          on:click|stopPropagation={(e) =>
-            deleteUserPrefilledOptions(customOption)}>✖</button
+          on:click={() => deleteUserPrefilledOptions(customOption)}>✖</button
         >
       </div>
     {/each}
