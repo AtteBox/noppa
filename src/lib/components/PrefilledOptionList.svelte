@@ -13,21 +13,22 @@
       >{option}</button
     >
   {/each}
-  </div>
-  <div class="user-option-scroll-container">
+</div>
+<div class="user-option-scroll-container">
   <div class="prefilled-user-options-container">
-  {#each Object.keys(userPrefilledOptions) as customOption}
-    <div class="custom-option">
-      <button on:click={() => setOptions(userPrefilledOptions[customOption])}
-        >{customOption}</button
-      >
-      <button
+    {#each Object.keys(userPrefilledOptions) as customOption}
+      <div class="custom-option">
+        <button on:click={() => setOptions(userPrefilledOptions[customOption])}
+          >{customOption}</button
+        >
+        <button
           class="destructive"
           title="Delete prefilled option"
           on:click|stopPropagation={(e) =>
-            deleteUserPrefilledOptions(customOption)}>✖</button>
-    </div>
-  {/each}
+            deleteUserPrefilledOptions(customOption)}>✖</button
+        >
+      </div>
+    {/each}
   </div>
 </div>
 

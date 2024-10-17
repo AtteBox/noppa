@@ -9,7 +9,7 @@ export function generateDistinctColors(colorCount: number): string[] {
     throw new Error("Cannot generate less than 1 color");
   }
 
-  if(colorCount > MAX_COLORS) {
+  if (colorCount > MAX_COLORS) {
     throw new Error(`Cannot generate more than ${MAX_COLORS} colors`);
   }
 
