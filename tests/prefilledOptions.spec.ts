@@ -1,6 +1,15 @@
 import test, { expect, Page } from "@playwright/test";
 import { assertDefinedOptions, createOptions } from "./helpers/options";
 
+test("user can use predifined prefilled options", async ({ page }) => {
+  const predefinedOptionName = "Dice Numbers";
+  const predefinedOptions = ["1", "2", "3", "4", "5", "6"];
+  await page.goto("/");
+
+  await page.getByRole("button", { name: predefinedOptionName }).click();
+  await assertDefinedOptions(page, predefinedOptions);
+});
+
 test("user can save and load own prefilled options", async ({ page }) => {
   await page.goto("/");
 
