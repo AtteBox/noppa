@@ -14,17 +14,8 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ["svelte.config.js"],
+  ignorePatterns: ["svelte.config.js", "playwright-report"],
   rules: {
-    "comma-dangle": [
-      "error",
-      {
-        arrays: "never",
-        objects: "always-multiline",
-        imports: "always-multiline",
-        exports: "always-multiline",
-        functions: "never",
-      },
-    ],
+    "comma-dangle": ["error", "never"],
   },
 };
