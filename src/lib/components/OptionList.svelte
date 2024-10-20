@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IOption } from "../domain";
+  import type { IOption } from "../domain/options";
 
   export let options: IOption[] = [];
   const deleteOption = (index: number) => {

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IPrefilledOptionLists } from "../domain";
+  import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
 
   export let prefilledOptions: IPrefilledOptionLists = {};
   export let userPrefilledOptions: IPrefilledOptionLists = {};

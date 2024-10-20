@@ -1,10 +1,11 @@
 <script lang="ts">
-  import type { IOption, IPrefilledOptionLists } from "../domain";
-  import { generateDistinctColors } from "../utils/colors";
+  import type { IOption } from "../domain/options";
+  import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
+  import { generateDistinctColors } from "../domain/colors";
   import {
     PREFILLED_OPTIONS,
     UserPrefilledOptionPersistence
-  } from "../utils/prefilledOptions";
+  } from "../domain/prefilledOptions";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
   import OptionList from "./OptionList.svelte";

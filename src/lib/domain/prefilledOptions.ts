@@ -1,4 +1,4 @@
-import type { IPrefilledOptionLists } from "../domain";
+export type IPrefilledOptionLists = { [listName: string]: string[] };
 
 const USER_PREFILLED_OPTIONS_KEY = "userPrefilledOptions";
 
