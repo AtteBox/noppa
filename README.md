@@ -1,33 +1,79 @@
 # Noppa 🎲 — A Virtual Dice
 
-A dice for any options: An app (PWA) for randomly picking an option from a list which the user can enter.
+A dice for any options: an app (PWA) for randomly picking an option from a list which the user can enter.
 
-# Deployment
+You can try the deployed "production" version here: https://main.dfmzvros4dh9z.amplifyapp.
 
-The PWA app has been deployed using AWS Amplify: https://main.dfmzvros4dh9z.amplifyapp.com/
+## Idea / Background
 
-# Svelte + TS + Vite
+> "Noppa" is Finnish for "dice". The idea for this app actually came from my boss, who probably 10 years ago hinted about this idea. I didn't think much of it back then and now there probably are hundreds of similar apps. However, I came to think about this when we had picked what movie to watch using an actual dice, and I thought it would be useful to be able to save the options, such as lunch place alternatives, and then just roll the dice to pick one. I didn't even Google for existing apps, because I thought this would be a great very small project to do to learn some new technologies.
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+## Features
 
-## Recommended IDE Setup
+- pick a random option from a list you can enter
+- save the list to local storage
+- predefined options (dice numbers, coin toss)
+- installable as a PWA (works offline)
+- easy to use
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## About the Code
 
-## Need an official Svelte framework?
+I decided to use [Svelte](https://svelte.dev/), because I wanted to try it out. In addition to that I only used familiar technologies, such as [Vite](https://vite.dev/) and [Playwright](https://playwright.dev/) so that I could focus on learning Svelte and get the app done quickly.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+I have also used as much AI as possible to get the foundation done as quickly as possible. This time I started by using ChatGPT to generate one Svelte component that included all the most central parts of the app. I then modified and refactored the code to be more readable and maintainable.
 
-## Technical considerations
+The PWA functionality was added (very easily) using the [vite-plugin-pwa](https://github.com/vite-pwa/vite-plugin-pwa) plugin.
 
-**Why use this over SvelteKit?**
+## Development
 
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
+### Prerequisites:
 
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
+- Node.js >= 20
 
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
+### Recommended IDE Setup
+
+[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+### Getting Started
+
+This is a [Vite](https://vite.dev/) project bootstrapped with `create-vite`.
+
+First, run the development server:
+
+```bash
+npm run dev
+```
+
+Open [ http://localhost:5173](http://localhost:5173) with your browser to see the result.
+
+ESLint and Prettier was added for linting and formatting, to enable a consistent code style. You can run the following commands to lint and format the code:
+
+```bash
+npm run format
+npm run lint
+```
+
+## Testing
+
+### E2E Tests
+
+The app is tested using [Playwright](https://playwright.dev/). The tests are located in the `tests`-folder. You can run the tests using:
+
+```bash
+npm run test:e2e
+```
+
+You can also run the tests in UI-mode (good while developing):
+
+```bash
+npm run test:e2e:ui
+```
+
+## Deployment
+
+The app is deployed using [AWS Amplify](https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html). The deployment is triggered by pushing to the main-branch.
+
+## Vite/Svelte/Typescript Project FAQ
 
 **Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
 
