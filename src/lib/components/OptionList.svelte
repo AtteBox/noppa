@@ -17,7 +17,7 @@
   };
 </script>
 
-<ul class="options">
+<ul id="options">
   {#each options as { text, color }, index}
     <li style="background-color: {color};">
       <input
@@ -40,12 +40,12 @@
     margin-right: 0.5em;
   }
 
-  ul.options {
+  ul#options {
     list-style-type: none;
     padding: 0;
   }
 
-  ul.options > li {
+  ul#options > li {
     margin-bottom: 0.5em;
     padding: 0.5em;
     border-radius: 5px;
