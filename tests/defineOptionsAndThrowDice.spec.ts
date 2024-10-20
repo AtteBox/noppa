@@ -132,7 +132,7 @@ async function waitForResult(page) {
 }
 
 /**
- * Assets that the result is one of the provided options
+ * Asserts that the result is one of the provided options
  * @param page
  * @param options
  */
