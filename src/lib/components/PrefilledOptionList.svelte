@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IPrefilledOptionLists } from "../domain";
+  import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
 
   export let prefilledOptions: IPrefilledOptionLists = {};
   export let userPrefilledOptions: IPrefilledOptionLists = {};
@@ -23,7 +23,7 @@
         >
         <button
           class="destructive"
-          title="Delete prefilled option"
+          title="Delete {customOption}"
           on:click={() => deleteUserPrefilledOptions(customOption)}>✖</button
         >
       </div>

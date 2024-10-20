@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { IOption } from "../domain";
+  import type { IOption } from "../domain/options";
 
   export let options: IOption[] = [];
   const deleteOption = (index: number) => {
@@ -8,7 +8,7 @@
 
   const editOption = (index: number, newValue: string) => {
     options = options.map((item, i) =>
-      i === index ? { ...item, text: newValue } : item
+      i === index ? { ...item, text: newValue } : item,
     );
   };
 

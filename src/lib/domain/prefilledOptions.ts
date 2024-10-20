@@ -1,4 +1,4 @@
-import type { IPrefilledOptionLists } from "../domain";
+export type IPrefilledOptionLists = { [listName: string]: string[] };
 
 const USER_PREFILLED_OPTIONS_KEY = "userPrefilledOptions";
 
@@ -11,7 +11,7 @@ export class UserPrefilledOptionPersistence {
   static save(userPrefilledOptions: IPrefilledOptionLists) {
     localStorage.setItem(
       USER_PREFILLED_OPTIONS_KEY,
-      JSON.stringify(userPrefilledOptions)
+      JSON.stringify(userPrefilledOptions),
     );
   }
 }
