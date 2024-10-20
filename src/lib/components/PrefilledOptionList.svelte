@@ -23,7 +23,7 @@
         >
         <button
           class="destructive"
-          title="Delete prefilled option"
+          title="Delete {customOption}"
           on:click={() => deleteUserPrefilledOptions(customOption)}>✖</button
         >
       </div>

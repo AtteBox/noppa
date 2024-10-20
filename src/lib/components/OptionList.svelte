@@ -8,7 +8,7 @@
 
   const editOption = (index: number, newValue: string) => {
     options = options.map((item, i) =>
-      i === index ? { ...item, text: newValue } : item
+      i === index ? { ...item, text: newValue } : item,
     );
   };
 

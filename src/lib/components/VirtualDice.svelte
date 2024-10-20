@@ -3,7 +3,7 @@
   import { generateDistinctColors } from "../utils/colors";
   import {
     PREFILLED_OPTIONS,
-    UserPrefilledOptionPersistence,
+    UserPrefilledOptionPersistence
   } from "../utils/prefilledOptions";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
@@ -15,7 +15,7 @@
   const Steps = {
     DefineOptions: 1,
     ThrowingDice: 2,
-    Result: 3,
+    Result: 3
   } as const;
   type IStep = (typeof Steps)[keyof typeof Steps];
 
@@ -43,7 +43,7 @@
     const colors = generateDistinctColors(options.length);
     options = options.map((option, index) => ({
       ...option,
-      color: colors[index],
+      color: colors[index]
     }));
   }
 
@@ -55,23 +55,23 @@
 
   async function deleteUserPrefilledOptions(name: string) {
     const isConfirmed = await confirmDialog.open(
-      `Are you sure you want to delete the custom option: "${name}"?`
+      `Are you sure you want to delete the custom option: "${name}"?`,
     );
     if (isConfirmed) {
       userPrefilledOptions = Object.fromEntries(
-        Object.entries(userPrefilledOptions).filter(([key]) => key !== name)
+        Object.entries(userPrefilledOptions).filter(([key]) => key !== name),
       );
     }
   }
 
   async function saveOptionsAsUserPrefilledOptions() {
     const name = await inputDialog.open(
-      "Enter a name for your prefilled options:"
+      "Enter a name for your prefilled options:",
     );
     if (name) {
       saveUserPrefilledOptions(
         name,
-        options.map((item) => item.text)
+        options.map((item) => item.text),
       );
     }
   }
@@ -211,7 +211,7 @@
 {/if}
 
 <ConfirmDialog bind:this={confirmDialog} />
-<InputDialog bind:this={inputDialog} />
+<InputDialog bind:this={inputDialog} isRequired={true} />
 
 <style>
   input.option-input {

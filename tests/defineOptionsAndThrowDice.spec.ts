@@ -1,4 +1,10 @@
 import { test, expect } from "@playwright/test";
+import {
+  assertDefinedOptions,
+  assertDefinedOptionsNotToContain,
+  createOptions,
+  updateOption,
+} from "./helpers/options";
 
 test("user can add options and get a random answer", async ({ page }) => {
   await page.goto("/");
@@ -7,10 +13,7 @@ test("user can add options and get a random answer", async ({ page }) => {
 
   const options = ["Option 1", "Option 2"];
 
-  for (const option of options) {
-    await page.getByPlaceholder("New Option").fill(option);
-    await page.getByRole("button", { name: "Add Option" }).click();
-  }
+  await createOptions(options, page);
 
   await assertDefinedOptions(page, options);
 
@@ -29,10 +32,7 @@ test("user can modify options and get a random answer", async ({ page }) => {
 
   const options = ["Option 1", "Option 2"];
 
-  for (const option of options) {
-    await page.getByPlaceholder("New Option").fill(option);
-    await page.getByRole("button", { name: "Add Option" }).click();
-  }
+  await createOptions(options, page);
   await page.getByRole("button", { name: "Throw Dice!" }).click();
 
   await page.getByRole("button", { name: "Modify Options" }).click();
@@ -60,10 +60,7 @@ test("user can delete an option", async ({ page }) => {
 
   const options = ["Option 1", "Option 2"];
 
-  for (const option of options) {
-    await page.getByPlaceholder("New Option").fill(option);
-    await page.getByRole("button", { name: "Add Option" }).click();
-  }
+  await createOptions(options, page);
 
   await page.getByRole("button", { name: "Delete" }).nth(1).click();
   await assertDefinedOptionsNotToContain(page, options[1]);
@@ -76,10 +73,7 @@ test("user can reset the options (Start Over)", async ({ page }) => {
 
   const options = ["Option 1", "Option 2"];
 
-  for (const option of options) {
-    await page.getByPlaceholder("New Option").fill(option);
-    await page.getByRole("button", { name: "Add Option" }).click();
-  }
+  await createOptions(options, page);
 
   await page.getByRole("button", { name: "Throw Dice!" }).click();
 
@@ -94,10 +88,7 @@ test("user can rethrow the dice", async ({ page }) => {
 
   const options = ["Option 1", "Option 2"];
 
-  for (const option of options) {
-    await page.getByPlaceholder("New Option").fill(option);
-    await page.getByRole("button", { name: "Add Option" }).click();
-  }
+  await createOptions(options, page);
 
   await page.getByRole("button", { name: "Throw Dice!" }).click();
 
@@ -113,10 +104,7 @@ test("user can clear options", async ({ page }) => {
 
   const options = ["Option 1", "Option 2"];
 
-  for (const option of options) {
-    await page.getByPlaceholder("New Option").fill(option);
-    await page.getByRole("button", { name: "Add Option" }).click();
-  }
+  await createOptions(options, page);
 
   await page.getByRole("button", { name: "Clear Options" }).click();
   await assertStepIsHighlighted(page, 1);
@@ -127,7 +115,7 @@ test("user can clear options", async ({ page }) => {
 async function waitForResult(page) {
   // the result is displayed, when the buttons appear
   await expect(
-    page.getByRole("button", { name: "Modify Options" })
+    page.getByRole("button", { name: "Modify Options" }),
   ).toBeVisible();
 }
 
@@ -142,48 +130,6 @@ async function assertResult(page, options: string[]) {
       new RegExp("^(" + options.map(escapeRegExp).join("|") + ")$"),
     ),
   ).toBeVisible();
-}
-
-/**
- * Updates option based on provided previous value
- * @param page
- * @param oldOptionValue
- * @param newOptionValue
- */
-async function updateOption(
-  page,
-  oldOptionValue: string,
-  newOptionValue: string,
-) {
-  const optionInputs = await page.getByRole("textbox").all();
-  const allOptionInputValues = await Promise.all(
-    optionInputs.map((input) => input.inputValue()),
-  );
-  const inputIndex = allOptionInputValues.findIndex(
-    (inputValue) => inputValue === oldOptionValue,
-  );
-  const input = optionInputs[inputIndex];
-  await input.fill(newOptionValue);
-}
-
-async function assertDefinedOptions(page, options: string[]) {
-  const optionInputs = await page.getByRole("textbox").all();
-  const allOptionInputValues = await Promise.all(
-    optionInputs.map((input) => input.inputValue()),
-  );
-
-  for (const option of options) {
-    await expect(allOptionInputValues).toContainEqual(option);
-  }
-}
-
-async function assertDefinedOptionsNotToContain(page, option: string) {
-  const optionInputs = await page.getByRole("textbox").all();
-  const allOptionInputValues = await Promise.all(
-    optionInputs.map((input) => input.inputValue()),
-  );
-
-  await expect(allOptionInputValues).not.toContainEqual(option);
 }
 
 async function assertStepIsHighlighted(page, stepNumber) {
