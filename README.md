@@ -2,7 +2,7 @@
 
 A dice for any options: an app (PWA) for randomly picking an option from a list which the user can enter.
 
-You can try the deployed "production" version here: https://main.dfmzvros4dh9z.amplifyapp.
+You can try the deployed "production" version here: https://main.dfmzvros4dh9z.amplifyapp.com/.
 
 ## Idea / Background
 
