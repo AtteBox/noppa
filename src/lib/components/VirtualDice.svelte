@@ -1,24 +1,24 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import { run } from "svelte/legacy";
 
   import type { IOption } from "../domain/options";
   import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
   import { generateDistinctColors } from "../domain/colors";
   import {
     PREFILLED_OPTIONS,
-    UserPrefilledOptionPersistence
+    UserPrefilledOptionPersistence,
   } from "../domain/prefilledOptions";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
   import OptionList from "./OptionList.svelte";
   import PrefilledOptionList from "./PrefilledOptionList.svelte";
-  let confirmDialog: ConfirmDialog = $state();
-  let inputDialog: InputDialog = $state();
+  let confirmDialog: ConfirmDialog | undefined = $state();
+  let inputDialog: InputDialog | undefined = $state();
 
   const Steps = {
     DefineOptions: 1,
     ThrowingDice: 2,
-    Result: 3
+    Result: 3,
   } as const;
   type IStep = (typeof Steps)[keyof typeof Steps];
 
@@ -26,19 +26,17 @@
   let newOptionText: string = $state("");
   let currentStep: IStep = $state(Steps.DefineOptions);
   let randomResultOption: IOption | null = $state(null);
-  let newOptionInput: HTMLInputElement = $state();
+  let newOptionInput: HTMLInputElement | undefined = $state();
   let animationShownOption: IOption | null = $state(null);
-  let userPrefilledOptions: IPrefilledOptionLists =
-    $state(UserPrefilledOptionPersistence.load());
-
-
-
+  let userPrefilledOptions: IPrefilledOptionLists = $state(
+    UserPrefilledOptionPersistence.load(),
+  );
 
   function updateColors() {
     const colors = generateDistinctColors(options.length);
     options = options.map((option, index) => ({
       ...option,
-      color: colors[index]
+      color: colors[index],
     }));
   }
 
@@ -49,7 +47,7 @@
   }
 
   async function deleteUserPrefilledOptions(name: string) {
-    const isConfirmed = await confirmDialog.open(
+    const isConfirmed = await confirmDialog!.open(
       `Are you sure you want to delete the custom option: "${name}"?`,
     );
     if (isConfirmed) {
@@ -60,7 +58,7 @@
   }
 
   async function saveOptionsAsUserPrefilledOptions() {
-    const name = await inputDialog.open(
+    const name = await inputDialog!.open(
       "Enter a name for your prefilled options:",
     );
     if (name) {
@@ -75,7 +73,7 @@
     if (newOptionText.trim()) {
       options = [...options, { text: newOptionText, color: "" }];
       newOptionText = "";
-      newOptionInput.focus();
+      newOptionInput!.focus();
     }
   };
 
@@ -212,8 +210,7 @@
     <div class="controls">
       <button class="primary" onclick={backToOptions}>Modify Options</button>
       <button onclick={throwDice}>Rethrow Dice</button>
-      <button class="destructive-button" onclick={startOver}>Start Over</button
-      >
+      <button class="destructive-button" onclick={startOver}>Start Over</button>
       <button onclick={saveOptionsAsUserPrefilledOptions}>Save Options</button>
     </div>
   </div>

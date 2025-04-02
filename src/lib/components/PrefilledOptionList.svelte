@@ -12,7 +12,7 @@
     prefilledOptions = {},
     userPrefilledOptions = {},
     setOptions,
-    deleteUserPrefilledOptions
+    deleteUserPrefilledOptions,
   }: Props = $props();
 </script>
 
