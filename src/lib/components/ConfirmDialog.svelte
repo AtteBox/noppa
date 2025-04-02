@@ -1,6 +1,6 @@
 <script lang="ts">
-  let isOpen = false;
-  let _message = "";
+  let isOpen = $state(false);
+  let _message = $state("");
 
   let resolve: (result: boolean) => void;
 
@@ -33,8 +33,8 @@
     >
       <p id="input-dialog-message">{_message}</p>
       <div class="modal-buttons">
-        <button class="destructive" on:click={confirm}>Yes</button>
-        <button on:click={cancel}>No</button>
+        <button class="destructive" onclick={confirm}>Yes</button>
+        <button onclick={cancel}>No</button>
       </div>
     </div>
   </div>

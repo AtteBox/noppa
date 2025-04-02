@@ -1,15 +1,24 @@
 <script lang="ts">
   import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
 
-  export let prefilledOptions: IPrefilledOptionLists = {};
-  export let userPrefilledOptions: IPrefilledOptionLists = {};
-  export let setOptions: (options: string[]) => void;
-  export let deleteUserPrefilledOptions: (name: string) => void;
+  interface Props {
+    prefilledOptions?: IPrefilledOptionLists;
+    userPrefilledOptions?: IPrefilledOptionLists;
+    setOptions: (options: string[]) => void;
+    deleteUserPrefilledOptions: (name: string) => void;
+  }
+
+  let {
+    prefilledOptions = {},
+    userPrefilledOptions = {},
+    setOptions,
+    deleteUserPrefilledOptions,
+  }: Props = $props();
 </script>
 
 <div class="prefilled-options-container">
   {#each Object.keys(prefilledOptions) as option}
-    <button on:click={() => setOptions(prefilledOptions[option])}
+    <button onclick={() => setOptions(prefilledOptions[option])}
       >{option}</button
     >
   {/each}
@@ -18,13 +27,13 @@
   <div class="prefilled-user-options-container">
     {#each Object.keys(userPrefilledOptions) as customOption}
       <div class="custom-option">
-        <button on:click={() => setOptions(userPrefilledOptions[customOption])}
+        <button onclick={() => setOptions(userPrefilledOptions[customOption])}
           >{customOption}</button
         >
         <button
           class="destructive"
           title="Delete {customOption}"
-          on:click={() => deleteUserPrefilledOptions(customOption)}>✖</button
+          onclick={() => deleteUserPrefilledOptions(customOption)}>✖</button
         >
       </div>
     {/each}

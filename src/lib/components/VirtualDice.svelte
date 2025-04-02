@@ -1,50 +1,42 @@
 <script lang="ts">
+  import { run } from "svelte/legacy";
+
   import type { IOption } from "../domain/options";
   import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
   import { generateDistinctColors } from "../domain/colors";
   import {
     PREFILLED_OPTIONS,
-    UserPrefilledOptionPersistence
+    UserPrefilledOptionPersistence,
   } from "../domain/prefilledOptions";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
   import OptionList from "./OptionList.svelte";
   import PrefilledOptionList from "./PrefilledOptionList.svelte";
-  let confirmDialog: ConfirmDialog;
-  let inputDialog: InputDialog;
+  let confirmDialog: ConfirmDialog | undefined = $state();
+  let inputDialog: InputDialog | undefined = $state();
 
   const Steps = {
     DefineOptions: 1,
     ThrowingDice: 2,
-    Result: 3
+    Result: 3,
   } as const;
   type IStep = (typeof Steps)[keyof typeof Steps];
 
-  let options: IOption[] = [];
-  let newOptionText: string = "";
-  let currentStep: IStep = Steps.DefineOptions;
-  let randomResultOption: IOption | null = null;
-  let newOptionInput: HTMLInputElement;
-  let animationShownOption: IOption | null = null;
-  let userPrefilledOptions: IPrefilledOptionLists =
-    UserPrefilledOptionPersistence.load();
-
-  $: UserPrefilledOptionPersistence.save(userPrefilledOptions);
-
-  $: if (options.length) {
-    updateColors();
-  }
-
-  $: if (currentStep === Steps.DefineOptions) {
-    randomResultOption = null;
-    animationShownOption = null;
-  }
+  let options: IOption[] = $state([]);
+  let newOptionText: string = $state("");
+  let currentStep: IStep = $state(Steps.DefineOptions);
+  let randomResultOption: IOption | null = $state(null);
+  let newOptionInput: HTMLInputElement | undefined = $state();
+  let animationShownOption: IOption | null = $state(null);
+  let userPrefilledOptions: IPrefilledOptionLists = $state(
+    UserPrefilledOptionPersistence.load(),
+  );
 
   function updateColors() {
     const colors = generateDistinctColors(options.length);
     options = options.map((option, index) => ({
       ...option,
-      color: colors[index]
+      color: colors[index],
     }));
   }
 
@@ -55,7 +47,7 @@
   }
 
   async function deleteUserPrefilledOptions(name: string) {
-    const isConfirmed = await confirmDialog.open(
+    const isConfirmed = await confirmDialog!.open(
       `Are you sure you want to delete the custom option: "${name}"?`,
     );
     if (isConfirmed) {
@@ -66,7 +58,7 @@
   }
 
   async function saveOptionsAsUserPrefilledOptions() {
-    const name = await inputDialog.open(
+    const name = await inputDialog!.open(
       "Enter a name for your prefilled options:",
     );
     if (name) {
@@ -81,7 +73,7 @@
     if (newOptionText.trim()) {
       options = [...options, { text: newOptionText, color: "" }];
       newOptionText = "";
-      newOptionInput.focus();
+      newOptionInput!.focus();
     }
   };
 
@@ -130,6 +122,20 @@
       addOption();
     }
   };
+  run(() => {
+    UserPrefilledOptionPersistence.save(userPrefilledOptions);
+  });
+  run(() => {
+    if (options.length) {
+      updateColors();
+    }
+  });
+  run(() => {
+    if (currentStep === Steps.DefineOptions) {
+      randomResultOption = null;
+      animationShownOption = null;
+    }
+  });
 </script>
 
 <div class="breadcrumb">
@@ -152,10 +158,10 @@
         bind:value={newOptionText}
         placeholder="New Option"
         bind:this={newOptionInput}
-        on:keydown={handleNewOptionKeyDown}
+        onkeydown={handleNewOptionKeyDown}
         aria-label="New Option Text"
       />
-      <button on:click={addOption}>Add Option</button>
+      <button onclick={addOption}>Add Option</button>
     </div>
 
     <OptionList bind:options />
@@ -163,12 +169,12 @@
     <div class="controls">
       <div class="button-group">
         {#if options.length > 1}
-          <button class="primary" on:click={throwDice}>Throw Dice!</button>
-          <button on:click={saveOptionsAsUserPrefilledOptions}
+          <button class="primary" onclick={throwDice}>Throw Dice!</button>
+          <button onclick={saveOptionsAsUserPrefilledOptions}
             >Save Options</button
           >
         {/if}
-        <button class="destructive-button" on:click={clearOptions}
+        <button class="destructive-button" onclick={clearOptions}
           >Clear Options</button
         >
       </div>
@@ -202,11 +208,10 @@
       >
     </p>
     <div class="controls">
-      <button class="primary" on:click={backToOptions}>Modify Options</button>
-      <button on:click={throwDice}>Rethrow Dice</button>
-      <button class="destructive-button" on:click={startOver}>Start Over</button
-      >
-      <button on:click={saveOptionsAsUserPrefilledOptions}>Save Options</button>
+      <button class="primary" onclick={backToOptions}>Modify Options</button>
+      <button onclick={throwDice}>Rethrow Dice</button>
+      <button class="destructive-button" onclick={startOver}>Start Over</button>
+      <button onclick={saveOptionsAsUserPrefilledOptions}>Save Options</button>
     </div>
   </div>
 {/if}
