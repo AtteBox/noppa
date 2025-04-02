@@ -14,8 +14,5 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ["svelte.config.js", "playwright-report"],
-  rules: {
-    "comma-dangle": ["error", "never"],
-  },
+  ignorePatterns: ["svelte.config.js", "playwright-report", "dist"],
 };

@@ -1,12 +1,17 @@
 <script lang="ts">
-  let isOpen = false;
-  let msg = "";
-  let showValidationError = false;
+  import { preventDefault } from "svelte/legacy";
 
-  let inputValue: string = "";
+  let isOpen = $state(false);
+  let msg = $state("");
+
+  let inputValue: string = $state("");
   let resolve: (value: string | null) => void;
 
-  export let isRequired: boolean = false;
+  interface Props {
+    isRequired?: boolean;
+  }
+
+  let { isRequired = false }: Props = $props();
 
   export function open(
     message: string,
@@ -30,7 +35,7 @@
   }
 
   // TODO: validation message is initially shown when the input is required
-  $: showValidationError = !isRequired || !!inputValue;
+  let showValidationError = $derived(!isRequired || !!inputValue);
 </script>
 
 {#if isOpen}
@@ -41,7 +46,7 @@
       aria-modal="true"
       aria-labelledby="input-dialog-message"
     >
-      <form on:submit|preventDefault={submit}>
+      <form onsubmit={preventDefault(submit)}>
         <p id="input-dialog-message">{msg}</p>
         <input
           type="text"
@@ -58,7 +63,7 @@
         </span>
         <div class="modal-buttons">
           <button type="submit" class="primary">OK</button>
-          <button on:click={cancel}>Cancel</button>
+          <button onclick={cancel}>Cancel</button>
         </div>
       </form>
     </div>

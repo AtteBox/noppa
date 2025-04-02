@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { IOption } from "../domain/options";
 
-  export let options: IOption[] = [];
+  interface Props {
+    options?: IOption[];
+  }
+
+  let { options = $bindable([]) }: Props = $props();
   const deleteOption = (index: number) => {
     options = options.filter((_, i) => i !== index);
   };
@@ -25,11 +29,11 @@
         id="item-{index}-input"
         class="option-input"
         bind:value={options[index].text}
-        on:input={(e) => handleOptionInputChanged(e, index)}
+        oninput={(e) => handleOptionInputChanged(e, index)}
         style="background-color: {color};"
         aria-labelledby="{index + 1}. Option Text"
       />
-      <button on:click={() => deleteOption(index)}>Delete</button>
+      <button onclick={() => deleteOption(index)}>Delete</button>
     </li>
   {/each}
 </ul>
