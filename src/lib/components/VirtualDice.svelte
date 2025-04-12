@@ -27,7 +27,6 @@
   let currentStep: IStep = $state(Steps.DefineOptions);
   let randomResultOption: IOption | null = $state(null);
   let newOptionInput: HTMLInputElement | undefined = $state();
-  let animationShownOption: IOption | null = $state(null);
   let userPrefilledOptions: IPrefilledOptionLists = $state(
     UserPrefilledOptionPersistence.load(),
   );
@@ -102,19 +101,12 @@
 
     currentStep = Steps.ThrowingDice;
     const rollDuration = 3000;
-    const diceAnimationInterval = 200;
-    const startTime = Date.now();
 
-    const intervalId = setInterval(() => {
+    setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * options.length);
-      animationShownOption = options[randomIndex];
-
-      if (Date.now() - startTime > rollDuration) {
-        clearInterval(intervalId);
-        randomResultOption = options[randomIndex];
-        currentStep = Steps.Result;
-      }
-    }, diceAnimationInterval);
+      randomResultOption = options[randomIndex];
+      currentStep = Steps.Result;
+    }, rollDuration);
   };
 
   const handleNewOptionKeyDown = (event: KeyboardEvent) => {
@@ -133,7 +125,6 @@
   run(() => {
     if (currentStep === Steps.DefineOptions) {
       randomResultOption = null;
-      animationShownOption = null;
     }
   });
 </script>
@@ -190,14 +181,9 @@
       />
     </div>
   </div>
-{:else if currentStep === Steps.ThrowingDice && animationShownOption}
+{:else if currentStep === Steps.ThrowingDice}
   <div>
-    <p>
-      <span
-        style="background-color: {animationShownOption.color};"
-        class="highlighted-choice">{animationShownOption.text}</span
-      >
-    </p>
+    <div id="dice-animation-dice">🎲</div>
   </div>
 {:else if currentStep === Steps.Result && randomResultOption}
   <div>
@@ -277,5 +263,22 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     text-shadow: #000 0px 0px 1px;
     -webkit-font-smoothing: antialiased;
+  }
+
+  #dice-animation-dice {
+    margin: 0;
+    padding: 0;
+    font-size: 2.5rem;
+    animation: rotate 0.8s infinite ease;
+    text-shadow: 0 0 3px #ddd;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>
