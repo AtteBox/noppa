@@ -269,16 +269,24 @@
     margin: 0;
     padding: 0;
     font-size: 2.5rem;
-    animation: rotate 0.8s infinite ease;
+    display: inline-block;
+    animation: throw 0.8s infinite linear;
     text-shadow: 0 0 3px #ddd;
+    will-change: transform;
   }
 
-  @keyframes rotate {
+  @keyframes throw {
     0% {
-      transform: rotate(0deg);
+      transform: translateY(0px) rotate(0deg) scale(1);
+    }
+    30% {
+      transform: translateY(-20px) rotate(120deg) scale(1.1);
+    }
+    60% {
+      transform: translateY(-10px) rotate(240deg) scale(0.95);
     }
     100% {
-      transform: rotate(360deg);
+      transform: translateY(0px) rotate(360deg) scale(1);
     }
   }
 </style>
