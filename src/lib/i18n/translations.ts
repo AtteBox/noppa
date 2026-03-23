@@ -63,6 +63,9 @@ export type TranslationKeys = {
 
   // PrefilledOptionList
   deletePrefilledOption: string;
+
+  // LanguageSelector
+  languageSelectorAriaLabel: string;
 };
 
 const en: TranslationKeys = {
@@ -112,6 +115,8 @@ const en: TranslationKeys = {
   right: "Right",
 
   deletePrefilledOption: "Delete {name}",
+
+  languageSelectorAriaLabel: "Language",
 };
 
 const fi: TranslationKeys = {
@@ -161,6 +166,8 @@ const fi: TranslationKeys = {
   right: "Oikea",
 
   deletePrefilledOption: "Poista {name}",
+
+  languageSelectorAriaLabel: "Kieli",
 };
 
 const sv: TranslationKeys = {
@@ -210,6 +217,8 @@ const sv: TranslationKeys = {
   right: "Höger",
 
   deletePrefilledOption: "Ta bort {name}",
+
+  languageSelectorAriaLabel: "Språk",
 };
 
 export type TranslationKey = keyof TranslationKeys;

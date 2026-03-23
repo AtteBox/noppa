@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getLocale, setLocale, locales, localeNames } from "../i18n/index.svelte";
+  import { getLocale, setLocale, locales, localeNames, t } from "../i18n/index.svelte";
   import type { Locale } from "../i18n/index.svelte";
 
   function handleChange(event: Event) {
@@ -12,7 +12,7 @@
   class="language-selector"
   value={getLocale()}
   onchange={handleChange}
-  aria-label="Language"
+  aria-label={t("languageSelectorAriaLabel")}
 >
   {#each locales as locale}
     <option value={locale}>{localeNames[locale]}</option>
