@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { t } from "../i18n";
+  import { t } from "../i18n/index.svelte";
 
   let isOpen = $state(false);
   let _message = $state("");

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { IOption } from "../domain/options";
-  import { t } from "../i18n";
+  import { t } from "../i18n/index.svelte";
 
   interface Props {
     options?: IOption[];

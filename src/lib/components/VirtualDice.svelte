@@ -8,7 +8,7 @@
     getPrefilledOptions,
     UserPrefilledOptionPersistence,
   } from "../domain/prefilledOptions";
-  import { t } from "../i18n";
+  import { t } from "../i18n/index.svelte";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
   import OptionList from "./OptionList.svelte";

@@ -2,7 +2,7 @@
   import githubLogo from "./assets/github-mark-white.svg";
   import VirtualDice from "./lib/components/VirtualDice.svelte";
   import LanguageSelector from "./lib/components/LanguageSelector.svelte";
-  import { t } from "./lib/i18n";
+  import { t } from "./lib/i18n/index.svelte";
 </script>
 
 <main>

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { getLocale, setLocale, locales, localeNames } from "../i18n";
-  import type { Locale } from "../i18n";
+  import { getLocale, setLocale, locales, localeNames } from "../i18n/index.svelte";
+  import type { Locale } from "../i18n/index.svelte";
 
   function handleChange(event: Event) {
     const select = event.target as HTMLSelectElement;

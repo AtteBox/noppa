@@ -1,6 +1,6 @@
 <script lang="ts">
   import { preventDefault } from "svelte/legacy";
-  import { t } from "../i18n";
+  import { t } from "../i18n/index.svelte";
 
   let isOpen = $state(false);
   let msg = $state("");

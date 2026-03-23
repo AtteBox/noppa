@@ -1,4 +1,4 @@
-import { t } from "../i18n";
+import { t } from "../i18n/index.svelte";
 
 export type IPrefilledOptionLists = { [listName: string]: string[] };
 
@@ -19,10 +19,9 @@ export class UserPrefilledOptionPersistence {
 }
 
 export function getPrefilledOptions(): IPrefilledOptionLists {
-  const tr = t();
   return {
-    [tr.diceNumbers]: ["1", "2", "3", "4", "5", "6"],
-    [tr.coinFlip]: [tr.heads, tr.tails],
-    [tr.direction]: [tr.left, tr.straight, tr.right],
+    [t().diceNumbers]: ["1", "2", "3", "4", "5", "6"],
+    [t().coinFlip]: [t().heads, t().tails],
+    [t().direction]: [t().left, t().straight, t().right],
   };
 }

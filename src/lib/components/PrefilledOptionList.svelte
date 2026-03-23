@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
-  import { t } from "../i18n";
+  import { t } from "../i18n/index.svelte";
 
   interface Props {
     prefilledOptions?: IPrefilledOptionLists;
