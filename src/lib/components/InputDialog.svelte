@@ -1,5 +1,6 @@
 <script lang="ts">
   import { preventDefault } from "svelte/legacy";
+  import { t } from "../i18n/index.svelte";
 
   let isOpen = $state(false);
   let msg = $state("");
@@ -59,11 +60,11 @@
           class="validation-error"
           style="visibility: {showValidationError ? 'hidden' : 'visible'}"
         >
-          Please enter a name.
+          {t("pleaseEnterName")}
         </span>
         <div class="modal-buttons">
-          <button type="submit" class="primary">OK</button>
-          <button onclick={cancel}>Cancel</button>
+          <button type="submit" class="primary">{t("ok")}</button>
+          <button onclick={cancel}>{t("cancel")}</button>
         </div>
       </form>
     </div>

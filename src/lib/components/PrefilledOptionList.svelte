@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
+  import { t } from "../i18n/index.svelte";
 
   interface Props {
     prefilledOptions?: IPrefilledOptionLists;
@@ -32,7 +33,7 @@
         >
         <button
           class="destructive"
-          title="Delete {customOption}"
+          title={t("deletePrefilledOption", { name: customOption })}
           onclick={() => deleteUserPrefilledOptions(customOption)}>✖</button
         >
       </div>

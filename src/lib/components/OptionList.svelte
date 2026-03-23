@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { IOption } from "../domain/options";
+  import { t } from "../i18n/index.svelte";
 
   interface Props {
     options?: IOption[];
@@ -31,9 +32,9 @@
         bind:value={options[index].text}
         oninput={(e) => handleOptionInputChanged(e, index)}
         style="background-color: {color};"
-        aria-labelledby="{index + 1}. Option Text"
+        aria-labelledby="{index + 1}. {t("optionTextAriaLabel")}"
       />
-      <button onclick={() => deleteOption(index)}>Delete</button>
+      <button onclick={() => deleteOption(index)}>{t("deleteButton")}</button>
     </li>
   {/each}
 </ul>
