@@ -60,11 +60,11 @@
           class="validation-error"
           style="visibility: {showValidationError ? 'hidden' : 'visible'}"
         >
-          {t().pleaseEnterName}
+          {t.pleaseEnterName}
         </span>
         <div class="modal-buttons">
-          <button type="submit" class="primary">{t().ok}</button>
-          <button onclick={cancel}>{t().cancel}</button>
+          <button type="submit" class="primary">{t.ok}</button>
+          <button onclick={cancel}>{t.cancel}</button>
         </div>
       </form>
     </div>

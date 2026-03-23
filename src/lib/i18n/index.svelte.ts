@@ -31,9 +31,14 @@ export function setLocale(locale: Locale) {
   document.documentElement.lang = locale;
 }
 
-export function t(): TranslationKeys {
-  return translations[currentLocale];
-}
+export const t: TranslationKeys = new Proxy(
+  {} as TranslationKeys,
+  {
+    get(_, key: string) {
+      return translations[currentLocale][key as keyof TranslationKeys];
+    },
+  },
+);
 
 // Initialize lang attribute
 document.documentElement.lang = currentLocale;

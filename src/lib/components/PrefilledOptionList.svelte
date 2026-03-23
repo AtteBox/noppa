@@ -33,7 +33,7 @@
         >
         <button
           class="destructive"
-          title={t().deletePrefilledOption.replace("{name}", customOption)}
+          title={t.deletePrefilledOption.replace("{name}", customOption)}
           onclick={() => deleteUserPrefilledOptions(customOption)}>✖</button
         >
       </div>

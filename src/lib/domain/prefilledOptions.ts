@@ -20,8 +20,8 @@ export class UserPrefilledOptionPersistence {
 
 export function getPrefilledOptions(): IPrefilledOptionLists {
   return {
-    [t().diceNumbers]: ["1", "2", "3", "4", "5", "6"],
-    [t().coinFlip]: [t().heads, t().tails],
-    [t().direction]: [t().left, t().straight, t().right],
+    [t.diceNumbers]: ["1", "2", "3", "4", "5", "6"],
+    [t.coinFlip]: [t.heads, t.tails],
+    [t.direction]: [t.left, t.straight, t.right],
   };
 }

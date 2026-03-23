@@ -35,8 +35,8 @@
     >
       <p id="input-dialog-message">{_message}</p>
       <div class="modal-buttons">
-        <button class="destructive" onclick={confirm}>{t().yes}</button>
-        <button onclick={cancel}>{t().no}</button>
+        <button class="destructive" onclick={confirm}>{t.yes}</button>
+        <button onclick={cancel}>{t.no}</button>
       </div>
     </div>
   </div>

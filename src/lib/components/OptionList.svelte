@@ -32,9 +32,9 @@
         bind:value={options[index].text}
         oninput={(e) => handleOptionInputChanged(e, index)}
         style="background-color: {color};"
-        aria-labelledby="{index + 1}. {t().optionTextAriaLabel}"
+        aria-labelledby="{index + 1}. {t.optionTextAriaLabel}"
       />
-      <button onclick={() => deleteOption(index)}>{t().deleteButton}</button>
+      <button onclick={() => deleteOption(index)}>{t.deleteButton}</button>
     </li>
   {/each}
 </ul>
