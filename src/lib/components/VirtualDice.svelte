@@ -48,7 +48,7 @@
 
   async function deleteUserPrefilledOptions(name: string) {
     const isConfirmed = await confirmDialog!.open(
-      t.confirmDeleteCustomOption.replace("{name}", name),
+      t("confirmDeleteCustomOption", { name }),
     );
     if (isConfirmed) {
       userPrefilledOptions = Object.fromEntries(
@@ -58,7 +58,7 @@
   }
 
   async function saveOptionsAsUserPrefilledOptions() {
-    const name = await inputDialog!.open(t.enterNameForPrefilledOptions);
+    const name = await inputDialog!.open(t("enterNameForPrefilledOptions"));
     if (name) {
       saveUserPrefilledOptions(
         name,
@@ -130,13 +130,13 @@
 
 <div class="breadcrumb">
   <span class={currentStep === Steps.DefineOptions ? "active" : ""}
-    >{t.stepDefineOptions}</span
+    >{t("stepDefineOptions")}</span
   >
   <span class={currentStep === Steps.ThrowingDice ? "active" : ""}
-    >{t.stepThrowingDice}</span
+    >{t("stepThrowingDice")}</span
   >
   <span class={currentStep === Steps.Result ? "active" : ""}
-    >{t.stepResult}</span
+    >{t("stepResult")}</span
   >
 </div>
 
@@ -148,12 +148,12 @@
         class="option-input"
         type="text"
         bind:value={newOptionText}
-        placeholder={t.newOptionPlaceholder}
+        placeholder={t("newOptionPlaceholder")}
         bind:this={newOptionInput}
         onkeydown={handleNewOptionKeyDown}
-        aria-label={t.newOptionAriaLabel}
+        aria-label={t("newOptionAriaLabel")}
       />
-      <button onclick={addOption}>{t.addOption}</button>
+      <button onclick={addOption}>{t("addOption")}</button>
     </div>
 
     <OptionList bind:options />
@@ -161,19 +161,19 @@
     <div class="controls">
       <div class="button-group">
         {#if options.length > 1}
-          <button class="primary" onclick={throwDice}>{t.throwDice}</button>
+          <button class="primary" onclick={throwDice}>{t("throwDice")}</button>
           <button onclick={saveOptionsAsUserPrefilledOptions}
-            >{t.saveOptions}</button
+            >{t("saveOptions")}</button
           >
         {/if}
         <button class="destructive-button" onclick={clearOptions}
-          >{t.clearOptions}</button
+          >{t("clearOptions")}</button
         >
       </div>
     </div>
 
     <div class="prefilled-options">
-      <h3>{t.prefilledOptions}</h3>
+      <h3>{t("prefilledOptions")}</h3>
       <PrefilledOptionList
         prefilledOptions={getPrefilledOptions()}
         {userPrefilledOptions}
@@ -196,14 +196,14 @@
     </p>
     <div class="controls">
       <button class="primary" onclick={backToOptions}
-        >{t.modifyOptions}</button
+        >{t("modifyOptions")}</button
       >
-      <button onclick={throwDice}>{t.rethrowDice}</button>
+      <button onclick={throwDice}>{t("rethrowDice")}</button>
       <button class="destructive-button" onclick={startOver}
-        >{t.startOver}</button
+        >{t("startOver")}</button
       >
       <button onclick={saveOptionsAsUserPrefilledOptions}
-        >{t.saveOptions}</button
+        >{t("saveOptions")}</button
       >
     </div>
   </div>

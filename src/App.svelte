@@ -7,12 +7,12 @@
 
 <main>
   <div class="header-row">
-    <h1>{t.appTitle}</h1>
+    <h1>{t("appTitle")}</h1>
     <LanguageSelector />
   </div>
 
   <p class="read-the-docs">
-    {t.appDescription}
+    {t("appDescription")}
   </p>
   <VirtualDice />
 </main>
@@ -21,7 +21,7 @@
     © Atte Virtanen {new Date().getFullYear()}
     <a
       href="https://github.com/AtteBox/noppa"
-      title={t.openCodeInGithub}
+      title={t("openCodeInGithub")}
       target="_blank"
       rel="noopener noreferrer"
       ><img id="github-link-logo" src={githubLogo} alt="Github logo" /></a

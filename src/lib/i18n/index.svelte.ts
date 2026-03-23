@@ -2,7 +2,7 @@ import {
   translations,
   locales,
   type Locale,
-  type TranslationKeys,
+  type TranslationKey,
 } from "./translations";
 
 const LOCALE_STORAGE_KEY = "noppa-locale";
@@ -31,14 +31,18 @@ export function setLocale(locale: Locale) {
   document.documentElement.lang = locale;
 }
 
-export const t: TranslationKeys = new Proxy(
-  {} as TranslationKeys,
-  {
-    get(_, key: string) {
-      return translations[currentLocale][key as keyof TranslationKeys];
-    },
-  },
-);
+export function t(
+  key: TranslationKey,
+  params?: Record<string, string>,
+): string {
+  let value = translations[currentLocale][key];
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      value = value.replace(`{${k}}`, v);
+    }
+  }
+  return value;
+}
 
 // Initialize lang attribute
 document.documentElement.lang = currentLocale;

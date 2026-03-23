@@ -212,4 +212,6 @@ const sv: TranslationKeys = {
   deletePrefilledOption: "Ta bort {name}",
 };
 
+export type TranslationKey = keyof TranslationKeys;
+
 export const translations: Record<Locale, TranslationKeys> = { en, fi, sv };
