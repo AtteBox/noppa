@@ -7,11 +7,13 @@ Planned features and fixes for the next iteration of Noppa.
 ## 1. Bug Fixes / Polish
 
 ### CSS class mismatch on destructive buttons
+
 - **Files:** `src/lib/components/VirtualDice.svelte` (lines 168, 199)
 - **Issue:** "Clear Options" and "Start Over" buttons use class `destructive-button`, but `src/app.css` only defines `button.destructive`. These buttons don't get the red styling.
 - **Fix:** Change `class="destructive-button"` to `class="destructive"` on both buttons.
 
 ### InputDialog validation logic is inverted
+
 - **File:** `src/lib/components/InputDialog.svelte` (line 37)
 - **Issue:** `showValidationError` is derived as `!isRequired || !!inputValue`, which shows the validation message when it should be hidden and vice versa. The validation error ("Please enter a name.") appears initially when the dialog opens with `isRequired=true`.
 - **Fix:** Change the derived expression to `isRequired && !inputValue` so the error only shows when the field is required and empty.
@@ -71,17 +73,3 @@ Current animation: a rotating 🎲 emoji (0.8s rotation, 3-second duration). Enh
 - [ ] Ensure animations are smooth on mobile devices
 - [ ] Respect `prefers-reduced-motion` for accessibility
 
----
-
-## 6. Internationalization (i18n)
-
-The app name "Noppa" is Finnish for "dice" — add multi-language support.
-
-- [ ] Extract all hardcoded UI strings from components (primarily `src/lib/components/VirtualDice.svelte`, plus dialogs and `App.svelte`)
-- [ ] Create a simple translation system — e.g., JSON files per locale in `src/lib/i18n/` (`en.json`, `fi.json`)
-- [ ] Create a locale store/context that components can subscribe to
-- [ ] Add a language switcher in the UI (dropdown or flag icons)
-- [ ] Persist language preference to `localStorage`
-- [ ] Start with two languages: **English** (default) and **Finnish**
-- [ ] Ensure prefilled option names ("Dice Numbers", "Coin Flip", "Direction") are also translated
-- [ ] Add E2E tests verifying language switching works

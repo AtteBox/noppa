@@ -1,3 +1,5 @@
+import { t } from "../i18n/index.svelte";
+
 export type IPrefilledOptionLists = { [listName: string]: string[] };
 
 const USER_PREFILLED_OPTIONS_KEY = "userPrefilledOptions";
@@ -16,8 +18,10 @@ export class UserPrefilledOptionPersistence {
   }
 }
 
-export const PREFILLED_OPTIONS: IPrefilledOptionLists = {
-  "Dice Numbers": ["1", "2", "3", "4", "5", "6"],
-  "Coin Flip": ["Heads", "Tails"],
-  Direction: ["Left", "Straight", "Right"],
-};
+export function getPrefilledOptions(): IPrefilledOptionLists {
+  return {
+    [t("diceNumbers")]: ["1", "2", "3", "4", "5", "6"],
+    [t("coinFlip")]: [t("heads"), t("tails")],
+    [t("direction")]: [t("left"), t("straight"), t("right")],
+  };
+}
