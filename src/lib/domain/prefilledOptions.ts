@@ -1,3 +1,5 @@
+import { t } from "../i18n";
+
 export type IPrefilledOptionLists = { [listName: string]: string[] };
 
 const USER_PREFILLED_OPTIONS_KEY = "userPrefilledOptions";
@@ -16,8 +18,11 @@ export class UserPrefilledOptionPersistence {
   }
 }
 
-export const PREFILLED_OPTIONS: IPrefilledOptionLists = {
-  "Dice Numbers": ["1", "2", "3", "4", "5", "6"],
-  "Coin Flip": ["Heads", "Tails"],
-  Direction: ["Left", "Straight", "Right"],
-};
+export function getPrefilledOptions(): IPrefilledOptionLists {
+  const tr = t();
+  return {
+    [tr.diceNumbers]: ["1", "2", "3", "4", "5", "6"],
+    [tr.coinFlip]: [tr.heads, tr.tails],
+    [tr.direction]: [tr.left, tr.straight, tr.right],
+  };
+}

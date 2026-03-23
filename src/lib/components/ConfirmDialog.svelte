@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { t } from "../i18n";
+
   let isOpen = $state(false);
   let _message = $state("");
 
@@ -33,8 +35,8 @@
     >
       <p id="input-dialog-message">{_message}</p>
       <div class="modal-buttons">
-        <button class="destructive" onclick={confirm}>Yes</button>
-        <button onclick={cancel}>No</button>
+        <button class="destructive" onclick={confirm}>{t().yes}</button>
+        <button onclick={cancel}>{t().no}</button>
       </div>
     </div>
   </div>

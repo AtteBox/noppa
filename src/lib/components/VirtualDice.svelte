@@ -5,9 +5,10 @@
   import type { IPrefilledOptionLists } from "../domain/prefilledOptions";
   import { generateDistinctColors } from "../domain/colors";
   import {
-    PREFILLED_OPTIONS,
+    getPrefilledOptions,
     UserPrefilledOptionPersistence,
   } from "../domain/prefilledOptions";
+  import { t } from "../i18n";
   import ConfirmDialog from "./ConfirmDialog.svelte";
   import InputDialog from "./InputDialog.svelte";
   import OptionList from "./OptionList.svelte";
@@ -47,7 +48,7 @@
 
   async function deleteUserPrefilledOptions(name: string) {
     const isConfirmed = await confirmDialog!.open(
-      `Are you sure you want to delete the custom option: "${name}"?`,
+      t().confirmDeleteCustomOption.replace("{name}", name),
     );
     if (isConfirmed) {
       userPrefilledOptions = Object.fromEntries(
@@ -57,9 +58,7 @@
   }
 
   async function saveOptionsAsUserPrefilledOptions() {
-    const name = await inputDialog!.open(
-      "Enter a name for your prefilled options:",
-    );
+    const name = await inputDialog!.open(t().enterNameForPrefilledOptions);
     if (name) {
       saveUserPrefilledOptions(
         name,
@@ -131,12 +130,14 @@
 
 <div class="breadcrumb">
   <span class={currentStep === Steps.DefineOptions ? "active" : ""}
-    >1. Define Options</span
+    >{t().stepDefineOptions}</span
   >
   <span class={currentStep === Steps.ThrowingDice ? "active" : ""}
-    >2. Throwing Dice</span
+    >{t().stepThrowingDice}</span
   >
-  <span class={currentStep === Steps.Result ? "active" : ""}>3. Result</span>
+  <span class={currentStep === Steps.Result ? "active" : ""}
+    >{t().stepResult}</span
+  >
 </div>
 
 {#if currentStep === Steps.DefineOptions}
@@ -147,12 +148,12 @@
         class="option-input"
         type="text"
         bind:value={newOptionText}
-        placeholder="New Option"
+        placeholder={t().newOptionPlaceholder}
         bind:this={newOptionInput}
         onkeydown={handleNewOptionKeyDown}
-        aria-label="New Option Text"
+        aria-label={t().newOptionAriaLabel}
       />
-      <button onclick={addOption}>Add Option</button>
+      <button onclick={addOption}>{t().addOption}</button>
     </div>
 
     <OptionList bind:options />
@@ -160,21 +161,21 @@
     <div class="controls">
       <div class="button-group">
         {#if options.length > 1}
-          <button class="primary" onclick={throwDice}>Throw Dice!</button>
+          <button class="primary" onclick={throwDice}>{t().throwDice}</button>
           <button onclick={saveOptionsAsUserPrefilledOptions}
-            >Save Options</button
+            >{t().saveOptions}</button
           >
         {/if}
         <button class="destructive-button" onclick={clearOptions}
-          >Clear Options</button
+          >{t().clearOptions}</button
         >
       </div>
     </div>
 
     <div class="prefilled-options">
-      <h3>Prefilled Options:</h3>
+      <h3>{t().prefilledOptions}</h3>
       <PrefilledOptionList
-        prefilledOptions={PREFILLED_OPTIONS}
+        prefilledOptions={getPrefilledOptions()}
         {userPrefilledOptions}
         {setOptions}
         {deleteUserPrefilledOptions}
@@ -194,10 +195,16 @@
       >
     </p>
     <div class="controls">
-      <button class="primary" onclick={backToOptions}>Modify Options</button>
-      <button onclick={throwDice}>Rethrow Dice</button>
-      <button class="destructive-button" onclick={startOver}>Start Over</button>
-      <button onclick={saveOptionsAsUserPrefilledOptions}>Save Options</button>
+      <button class="primary" onclick={backToOptions}
+        >{t().modifyOptions}</button
+      >
+      <button onclick={throwDice}>{t().rethrowDice}</button>
+      <button class="destructive-button" onclick={startOver}
+        >{t().startOver}</button
+      >
+      <button onclick={saveOptionsAsUserPrefilledOptions}
+        >{t().saveOptions}</button
+      >
     </div>
   </div>
 {/if}

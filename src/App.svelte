@@ -1,14 +1,18 @@
 <script lang="ts">
   import githubLogo from "./assets/github-mark-white.svg";
   import VirtualDice from "./lib/components/VirtualDice.svelte";
+  import LanguageSelector from "./lib/components/LanguageSelector.svelte";
+  import { t } from "./lib/i18n";
 </script>
 
 <main>
-  <h1>Noppa 🎲</h1>
+  <div class="header-row">
+    <h1>{t().appTitle}</h1>
+    <LanguageSelector />
+  </div>
 
   <p class="read-the-docs">
-    A dice for any options: A PWA app for randomly picking an option from a list
-    which the user can enter.
+    {t().appDescription}
   </p>
   <VirtualDice />
 </main>
@@ -17,7 +21,7 @@
     © Atte Virtanen {new Date().getFullYear()}
     <a
       href="https://github.com/AtteBox/noppa"
-      title="Open code in Github"
+      title={t().openCodeInGithub}
       target="_blank"
       rel="noopener noreferrer"
       ><img id="github-link-logo" src={githubLogo} alt="Github logo" /></a
@@ -29,6 +33,13 @@
   .read-the-docs {
     color: #888;
     margin-bottom: 2rem;
+  }
+
+  .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
   }
 
   #github-link-logo {
