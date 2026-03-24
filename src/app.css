@@ -8,12 +8,11 @@
   --button-bg: #1a1a1a;
   --button-hover-bg: #2a2a2a;
   --button-hover-border: #646cff;
-  --button-hover-bg: #2a2a2a;
-  --button-hover-border: #646cff;
   --input-bg: #1a1a1a;
   --input-hover-bg: #2a2a2a;
   --input-border-color: #646cff;
   --highlight-text: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.5);
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -25,6 +24,25 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="light"] {
+  --primary-color: #4f56c9;
+  --primary-hover-color: #3f47b3;
+  --destructive-color: #dc3545;
+  --destructive-hover-color: #c82333;
+  --text-color: #213547;
+  --background-color: #ffffff;
+  --button-bg: #f0f0f0;
+  --button-hover-bg: #e0e0e0;
+  --button-hover-border: #4f56c9;
+  --input-bg: #f5f5f5;
+  --input-hover-bg: #ebebeb;
+  --input-border-color: #4f56c9;
+  --highlight-text: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.15);
+
+  color-scheme: light;
 }
 
 a {
@@ -124,7 +142,6 @@ input {
     color 0.3s;
   width: 100%;
   box-sizing: border-box;
-  text-shadow: #000 0px 0px 1px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -158,6 +175,6 @@ input:focus {
   border-radius: 8px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 15px var(--shadow-color);
   text-align: center;
 }

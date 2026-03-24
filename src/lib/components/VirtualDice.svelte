@@ -267,8 +267,8 @@
     border-radius: 4px;
     font-weight: bold;
     font-size: 2rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    text-shadow: #000 0px 0px 1px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    text-shadow: rgba(0, 0, 0, 0.3) 0px 0px 1px;
     -webkit-font-smoothing: antialiased;
   }
 
