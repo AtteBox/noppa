@@ -253,7 +253,7 @@
   .breadcrumb .active {
     font-weight: bold;
     text-decoration: underline;
-    color: white;
+    color: var(--primary-color);
   }
 
   .prefilled-options {
