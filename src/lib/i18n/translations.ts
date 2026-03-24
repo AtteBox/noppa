@@ -66,6 +66,9 @@ export type TranslationKeys = {
 
   // LanguageSelector
   languageSelectorAriaLabel: string;
+
+  // ThemeToggle
+  themeToggleAriaLabel: string;
 };
 
 const en: TranslationKeys = {
@@ -117,6 +120,8 @@ const en: TranslationKeys = {
   deletePrefilledOption: "Delete {name}",
 
   languageSelectorAriaLabel: "Language",
+
+  themeToggleAriaLabel: "Toggle light/dark theme",
 };
 
 const fi: TranslationKeys = {
@@ -168,6 +173,8 @@ const fi: TranslationKeys = {
   deletePrefilledOption: "Poista {name}",
 
   languageSelectorAriaLabel: "Kieli",
+
+  themeToggleAriaLabel: "Vaihda vaalea/tumma teema",
 };
 
 const sv: TranslationKeys = {
@@ -219,6 +226,8 @@ const sv: TranslationKeys = {
   deletePrefilledOption: "Ta bort {name}",
 
   languageSelectorAriaLabel: "Språk",
+
+  themeToggleAriaLabel: "Växla ljust/mörkt tema",
 };
 
 export type TranslationKey = keyof TranslationKeys;

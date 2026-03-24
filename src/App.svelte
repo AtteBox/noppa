@@ -2,12 +2,14 @@
   import githubLogo from "./assets/github-mark-white.svg";
   import VirtualDice from "./lib/components/VirtualDice.svelte";
   import LanguageSelector from "./lib/components/LanguageSelector.svelte";
+  import ThemeToggle from "./lib/components/ThemeToggle.svelte";
   import { t } from "./lib/i18n/index.svelte";
 </script>
 
 <main>
   <div class="header-row">
     <h1>{t("appTitle")}</h1>
+    <ThemeToggle />
     <LanguageSelector />
   </div>
 
@@ -31,7 +33,7 @@
 
 <style>
   .read-the-docs {
-    color: #888;
+    color: var(--muted-text-color);
     margin-bottom: 2rem;
   }
 
@@ -47,6 +49,10 @@
     height: 1.5rem;
     margin-left: 0.8rem;
     vertical-align: middle;
+  }
+
+  :global([data-theme="light"]) #github-link-logo {
+    filter: invert(1);
   }
 
   footer {
