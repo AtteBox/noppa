@@ -114,6 +114,7 @@ button:focus-visible {
 
 button.primary {
   background-color: var(--primary-color);
+  color: var(--highlight-text);
 }
 
 button.primary:hover {
@@ -123,6 +124,7 @@ button.primary:hover {
 
 button.destructive {
   background-color: var(--destructive-color);
+  color: var(--highlight-text);
 }
 
 button.destructive:hover {
