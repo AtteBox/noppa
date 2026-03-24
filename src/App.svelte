@@ -33,7 +33,7 @@
 
 <style>
   .read-the-docs {
-    color: #888;
+    color: var(--muted-text-color);
     margin-bottom: 2rem;
   }
 

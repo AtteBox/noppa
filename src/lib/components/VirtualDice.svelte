@@ -277,7 +277,7 @@
     padding: 0;
     font-size: 2.5rem;
     animation: rotate 0.8s infinite ease;
-    text-shadow: 0 0 3px #ddd;
+    text-shadow: 0 0 3px var(--shadow-color);
   }
 
   @keyframes rotate {

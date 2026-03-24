@@ -85,7 +85,7 @@
   }
 
   .validation-error {
-    color: red;
+    color: var(--destructive-color);
     font-size: 0.8rem;
   }
 </style>

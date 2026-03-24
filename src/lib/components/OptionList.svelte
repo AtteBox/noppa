@@ -54,7 +54,7 @@
     margin-bottom: 0.5em;
     padding: 0.5em;
     border-radius: 5px;
-    color: white;
+    color: var(--highlight-text);
     display: flex;
     margin: 1rem;
     display: flex;
@@ -64,6 +64,6 @@
   input.option-input {
     font-size: 1.5rem;
     margin-right: 0.5em;
-    color: white;
+    color: var(--highlight-text);
   }
 </style>

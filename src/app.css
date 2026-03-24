@@ -12,6 +12,7 @@
   --input-hover-bg: #2a2a2a;
   --input-border-color: #646cff;
   --highlight-text: #ffffff;
+  --muted-text-color: #888;
   --shadow-color: rgba(0, 0, 0, 0.5);
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -40,6 +41,7 @@
   --input-hover-bg: #ebebeb;
   --input-border-color: #4f56c9;
   --highlight-text: #ffffff;
+  --muted-text-color: #666;
   --shadow-color: rgba(0, 0, 0, 0.15);
 
   color-scheme: light;
@@ -161,7 +163,7 @@ input:focus {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--shadow-color);
   display: flex;
   justify-content: center;
   align-items: center;
